@@ -1,0 +1,10 @@
+.next
+.open-next
+.wrangler
+.tools
+node_modules
+coverage
+playwright-report
+test-results
+pnpm-lock.yaml
+docs/IMPLEMENTATION_PLAN.md
