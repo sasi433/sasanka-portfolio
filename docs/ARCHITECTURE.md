@@ -17,7 +17,7 @@ Local development uses the normal Next.js Node.js server for fast iteration. `in
 
 Because OpenNext is not fully compatible with native Windows package symlinks, `pnpm preview:docker` runs the same locked OpenNext preview workflow in a Node.js 24 Linux container. Production deployment remains assigned to Linux-based Cloudflare Workers Builds.
 
-No database, CMS, separate backend, contact provider, analytics service, or Cloudflare resource binding beyond static assets is configured in Phase 0.
+No database, CMS or separate backend is used.
 
 ## Phase 1 interface foundation
 
@@ -33,5 +33,32 @@ The mobile navigation uses the native modal dialog behavior for focus containmen
 - `open-next.config.ts`: OpenNext Cloudflare adapter configuration.
 - `wrangler.jsonc`: Worker entry point, compatibility settings, static assets, and observability.
 - `.dev.vars.example`: empty local variable contract for later phases; it contains no secrets.
+
+## Content and routing
+
+Verified public content lives in typed modules under `src/content`. `WorkItem` is the shared model for public applications and sanitised professional case studies. Static parameters pre-render every approved `/work/[slug]` route, while unknown slugs call `notFound()`.
+
+## Contact request flow
+
+```text
+Contact form
+  -> POST /api/contact
+      -> Zod validation and honeypot handling
+      -> Cloudflare rate-limit binding
+      -> server-side Turnstile verification
+      -> Resend plain-text and HTML email
+```
+
+Secrets are accessed only in the route handler. The visitor's address is reply-to rather than the sender, messages are not stored in a database, and provider errors are converted to generic responses with a request ID.
+
+## Search, analytics and performance
+
+Route-specific metadata, canonical links, Person JSON-LD, a generated Open Graph image, sitemap and environment-sensitive robots rules live in the App Router. Preview builds emit `noindex`; production indexing requires an explicit build-time environment value. Cloudflare Web Analytics loads only when its public token exists.
+
+The approved headshot is metadata-stripped and resized for its maximum rendered size. Next.js Image supplies responsive delivery. Client JavaScript is limited to interactions that need browser state, and all animation respects reduced-motion preferences.
+
+## Delivery ownership
+
+GitHub Actions is the code-quality gate. Cloudflare Workers Builds owns automatic production and preview deployment after the account owner connects the repository and supplies build/runtime configuration. Deployment, verification and rollback are documented in `docs/DEPLOYMENT.md`.
 
 The complete target architecture and phase boundaries remain defined in `docs/IMPLEMENTATION_PLAN.md`.

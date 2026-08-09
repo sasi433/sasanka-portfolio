@@ -9,13 +9,17 @@
     "build": "next build",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "preview:docker": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/preview-cloudflare.ps1",
+    "build:cloudflare": "opennextjs-cloudflare build",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "deploy:dry-run": "wrangler deploy --dry-run --outdir .tools/wrangler-dry-run",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "audit:lighthouse": "lighthouse http://127.0.0.1:3000 --chrome-flags='--headless --no-sandbox --disable-gpu' --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=.tools/lighthouse-home.json",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "engines": {
     "node": ">=24 <25",

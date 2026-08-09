@@ -1,13 +1,18 @@
-# Sasanka Maddala — Portfolio
+# Sasanka Maddala — Professional Portfolio
 
-This repository contains the source for a professional portfolio built with Next.js App Router and deployed to Cloudflare Workers through the OpenNext Cloudflare adapter.
+A production-oriented portfolio for Sasanka Maddala, Senior Software Engineer — Backend, Python, DevOps and Cloud-Native Systems.
 
-Phases 0 and 1 provide the platform, theme, shared-layout and reusable-component foundations with a temporary landing page. Final portfolio content, deeper routes, the contact workflow, release-level accessibility coverage and deployment automation remain intentionally deferred to their approved phases in [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+The application presents verified professional experience, manually curated public projects, sanitised engineering case studies and a secure contact workflow. It is built with Next.js App Router and deployed to Cloudflare Workers through the OpenNext Cloudflare adapter.
 
-## Prerequisites
+## Technology
 
-- Node.js 24 LTS (see `.nvmrc`)
-- pnpm 11 (Corepack is recommended)
+- Node.js 24 LTS and pnpm 11
+- Next.js 16, React 19 and TypeScript
+- Tailwind CSS with custom dark/light design tokens
+- Motion for restrained, reduced-motion-aware interaction
+- Zod, React Hook Form, Turnstile, Workers Rate Limiting and Resend
+- Vitest, React Testing Library, Playwright, axe and Lighthouse
+- Cloudflare Workers, OpenNext and Wrangler
 
 ## Local development
 
@@ -17,34 +22,50 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-The Next.js development server runs in Node.js. Before deployment, use `pnpm preview` to build with OpenNext and run the application in Cloudflare's local `workerd` runtime.
+Copy `.dev.vars.example` to the ignored `.dev.vars` only when testing integrations. Never commit real secrets.
 
-### Windows note
-
-OpenNext is not fully compatible with native Windows and may fail while creating package symlinks. With Docker Desktop running, use `pnpm preview:docker` for a Linux-based OpenNext build and local Workers preview. Run deployments from WSL 2 or Linux-based CI. Normal `pnpm dev`, linting, type-checking, tests, and Next.js builds work on native Windows.
+OpenNext does not fully support native Windows symlink behavior. On Windows with Docker Desktop running, use `pnpm preview:docker`. Run production deployments through Cloudflare Workers Builds, WSL 2 or another Linux environment.
 
 ## Commands
 
-| Command               | Purpose                                                    |
-| --------------------- | ---------------------------------------------------------- |
-| `pnpm dev`            | Start the Next.js development server                       |
-| `pnpm build`          | Create a production Next.js build                          |
-| `pnpm preview`        | Build with OpenNext and preview through Wrangler           |
-| `pnpm preview:docker` | Preview through OpenNext and Wrangler in Docker on Windows |
-| `pnpm deploy`         | Build and deploy to Cloudflare Workers                     |
-| `pnpm lint`           | Run ESLint                                                 |
-| `pnpm typecheck`      | Run TypeScript without emitting files                      |
-| `pnpm test`           | Run Vitest                                                 |
-| `pnpm test:e2e`       | Run Playwright end-to-end tests                            |
-| `pnpm format`         | Format repository files with Prettier                      |
+| Command                 | Purpose                                              |
+| ----------------------- | ---------------------------------------------------- |
+| `pnpm dev`              | Start the Next.js development server                 |
+| `pnpm start`            | Serve an existing production build                   |
+| `pnpm build`            | Create a production Next.js build                    |
+| `pnpm build:cloudflare` | Build the Cloudflare Worker with OpenNext            |
+| `pnpm preview`          | Build and preview through OpenNext/Wrangler          |
+| `pnpm preview:docker`   | Run the OpenNext preview in Node 24 Linux on Windows |
+| `pnpm deploy`           | Build and deploy immediately to Cloudflare           |
+| `pnpm upload`           | Build and upload a version without promoting it      |
+| `pnpm deploy:dry-run`   | Validate the generated Wrangler upload bundle        |
+| `pnpm lint`             | Run ESLint                                           |
+| `pnpm typecheck`        | Run TypeScript without emitting files                |
+| `pnpm test`             | Run unit, component and server tests                 |
+| `pnpm test:e2e`         | Run Playwright browser and accessibility tests       |
+| `pnpm audit:lighthouse` | Audit the local production homepage                  |
+| `pnpm format`           | Format files with Prettier                           |
+| `pnpm format:check`     | Verify formatting without writing                    |
 
-## Environment variables
+## Architecture
 
-Copy `.dev.vars.example` to `.dev.vars` only when a later phase introduces integrations. Keep `.dev.vars` and all real secrets uncommitted. Cloudflare production secrets must be configured as encrypted Worker secrets, not public Wrangler variables.
+The App Router uses React Server Components by default. Client components are limited to theme selection, mobile navigation, career animation and contact-form interaction. Typed files under `src/content` provide the public portfolio content and reusable work-detail model.
 
-## Deployment
+`POST /api/contact` validates input server-side, rejects honeypots silently, verifies Turnstile, applies the Workers rate-limit binding and delivers plain-text and HTML email through Resend. Messages are not stored in a database and provider internals are not returned to visitors.
 
-The Worker configuration is in `wrangler.jsonc`. The initial target is Cloudflare Workers on a `workers.dev` subdomain. Automatic deployment through Cloudflare Workers Builds is deferred until the deployment phase.
+Metadata, JSON-LD, sitemap, robots rules, a generated Open Graph image and optional Cloudflare Web Analytics are environment-aware. Preview builds remain non-indexable until `NEXT_PUBLIC_SITE_ENV=production` is explicitly configured.
+
+See [architecture](docs/ARCHITECTURE.md), [deployment and rollback](docs/DEPLOYMENT.md), [performance](docs/PERFORMANCE.md), [content inventory](docs/CONTENT_INVENTORY.md) and the approved [implementation plan](docs/IMPLEMENTATION_PLAN.md).
+
+## Continuous integration and deployment
+
+GitHub Actions validates formatting, linting, types, unit/component/server tests, Playwright/axe behavior, the OpenNext Worker build and Wrangler dry-run bundle on every push to `main` and every pull request.
+
+Cloudflare Workers Builds is the intended deployment owner. The dashboard connection, build-time values, encrypted runtime secrets and first production deployment require account-owner setup described in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
+## Content and privacy
+
+Professional claims are sourced from approved content. Employer case studies use generic names and newly created diagrams; no employer-owned code, screenshots, logs, internal URLs, credentials or customer data are included. No phone number, home address, current city, family information or availability status is published.
 
 ## Rights
 
