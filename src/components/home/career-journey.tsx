@@ -1,7 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
-
 const milestones = [
   {
     label: "Systems foundations",
@@ -30,8 +26,6 @@ const milestones = [
 ] as const;
 
 export function CareerJourney() {
-  const reduceMotion = useReducedMotion();
-
   return (
     <ol className="relative grid gap-5 lg:grid-cols-4 lg:gap-4">
       <span
@@ -39,13 +33,12 @@ export function CareerJourney() {
         className="absolute top-5 bottom-5 left-[0.4375rem] w-px bg-[var(--border)] lg:top-[0.4375rem] lg:right-5 lg:bottom-auto lg:left-5 lg:h-px lg:w-auto"
       />
       {milestones.map((milestone, index) => (
-        <motion.li
+        <li
           key={milestone.title}
-          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.35 }}
-          transition={{ duration: 0.35, delay: index * 0.06 }}
-          className="relative pl-8 lg:pt-8 lg:pl-0"
+          className="journey-milestone relative pl-8 lg:pt-8 lg:pl-0"
+          style={
+            { "--journey-delay": `${index * 45}ms` } as React.CSSProperties
+          }
         >
           <span
             aria-hidden="true"
@@ -58,7 +51,7 @@ export function CareerJourney() {
           <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
             {milestone.description}
           </p>
-        </motion.li>
+        </li>
       ))}
     </ol>
   );

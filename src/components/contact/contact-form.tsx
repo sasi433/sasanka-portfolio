@@ -3,14 +3,38 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { contactSchema, type ContactInput } from "@/lib/contact/schema";
 
 const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
-export function ContactForm() {
+type TurnstileApi = {
+  render: (
+    container: HTMLElement,
+    options: {
+      sitekey: string;
+      callback: (token: string) => void;
+      "expired-callback": () => void;
+      "error-callback": () => void;
+    },
+  ) => string;
+  remove: (widgetId: string) => void;
+  reset: () => void;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileApi;
+  }
+}
+
+export function ContactForm({
+  turnstileSiteKey = siteKey,
+}: {
+  turnstileSiteKey?: string;
+} = {}) {
   const router = useRouter();
   const [serverError, setServerError] = useState("");
   const {
@@ -23,24 +47,43 @@ export function ContactForm() {
     defaultValues: { company: "", turnstileToken: "" },
   });
 
+  const handleTurnstileToken = useCallback(
+    (token: string) =>
+      setValue("turnstileToken", token, { shouldValidate: true }),
+    [setValue],
+  );
+
   async function onSubmit(values: ContactInput) {
     setServerError("");
-    const result = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const payload = (await result.json()) as {
-      message: string;
-      requestId?: string;
-    };
-    if (result.ok) {
-      router.push("/contact/sent");
-      return;
+    try {
+      const result = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const payload = (await result.json()) as {
+        message: string;
+        requestId?: string;
+      };
+      if (result.ok) {
+        router.push("/contact/sent");
+        return;
+      }
+      resetChallenge();
+      setServerError(
+        `${payload.message}${payload.requestId ? ` Reference: ${payload.requestId}` : ""}`,
+      );
+    } catch {
+      resetChallenge();
+      setServerError(
+        "The message could not be sent. Please try again or use the email link below.",
+      );
     }
-    setServerError(
-      `${payload.message}${payload.requestId ? ` Reference: ${payload.requestId}` : ""}`,
-    );
+  }
+
+  function resetChallenge() {
+    window.turnstile?.reset();
+    setValue("turnstileToken", "");
   }
 
   return (
@@ -80,18 +123,11 @@ export function ContactForm() {
           <input {...register("company")} tabIndex={-1} autoComplete="off" />
         </label>
       </div>
-      {siteKey ? (
-        <>
-          <Script
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-            strategy="afterInteractive"
-          />
-          <div
-            className="cf-turnstile"
-            data-sitekey={siteKey}
-            data-callback="portfolioTurnstileCallback"
-          />
-        </>
+      {turnstileSiteKey ? (
+        <TurnstileWidget
+          siteKey={turnstileSiteKey}
+          onToken={handleTurnstileToken}
+        />
       ) : (
         <p className="text-sm text-[var(--text-secondary)]">
           The secure contact form is awaiting its anti-bot configuration. Email
@@ -109,16 +145,9 @@ export function ContactForm() {
           {serverError}
         </p>
       ) : null}
-      <Button type="submit" disabled={isSubmitting || !siteKey}>
-        {isSubmitting ? "Sending…" : "Send message"}
+      <Button type="submit" disabled={isSubmitting || !turnstileSiteKey}>
+        {isSubmitting ? "Sending..." : "Send message"}
       </Button>
-      {siteKey ? (
-        <TurnstileBridge
-          onToken={(token) =>
-            setValue("turnstileToken", token, { shouldValidate: true })
-          }
-        />
-      ) : null}
     </form>
   );
 }
@@ -148,12 +177,40 @@ function Field({
   );
 }
 
-function TurnstileBridge({ onToken }: { onToken: (token: string) => void }) {
-  if (typeof window !== "undefined")
-    (
-      window as typeof window & {
-        portfolioTurnstileCallback?: (token: string) => void;
-      }
-    ).portfolioTurnstileCallback = onToken;
-  return null;
+export function TurnstileWidget({
+  siteKey,
+  onToken,
+}: {
+  siteKey: string;
+  onToken: (token: string) => void;
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const turnstile = window.turnstile;
+    if (!isReady || !container || !turnstile) return;
+
+    const clearToken = () => onToken("");
+    const widgetId = turnstile.render(container, {
+      sitekey: siteKey,
+      callback: onToken,
+      "expired-callback": clearToken,
+      "error-callback": clearToken,
+    });
+
+    return () => turnstile.remove(widgetId);
+  }, [isReady, onToken, siteKey]);
+
+  return (
+    <>
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+        strategy="afterInteractive"
+        onReady={() => setIsReady(true)}
+      />
+      <div ref={containerRef} />
+    </>
+  );
 }

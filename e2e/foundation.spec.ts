@@ -245,8 +245,12 @@ test("core routes have no serious automated accessibility violations", async ({
 
 async function waitForPageAnimation(page: import("@playwright/test").Page) {
   await page.locator(".page-shell").evaluate(async (element) => {
+    const documentTimeline = element.ownerDocument.timeline;
     await Promise.all(
-      element.getAnimations().map((animation) => animation.finished),
+      element
+        .getAnimations()
+        .filter((animation) => animation.timeline === documentTimeline)
+        .map((animation) => animation.finished),
     );
   });
 }

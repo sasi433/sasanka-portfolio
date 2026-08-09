@@ -48,6 +48,7 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
       <body>
+        <PersonJsonLd />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -56,7 +57,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SkipLink />
-          <PersonJsonLd />
           <div className="flex min-h-screen flex-col">
             <SiteHeader />
             <main id="main-content" tabIndex={-1} className="flex-1">
