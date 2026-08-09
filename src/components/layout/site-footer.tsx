@@ -6,9 +6,12 @@ export function SiteFooter() {
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-[var(--text-secondary)] sm:px-8 md:flex-row md:items-center md:justify-between lg:px-12">
         <p>Copyright © 2026 Sasanka Maddala. All rights reserved.</p>
         <div className="flex items-center gap-4">
-          <span className="font-mono text-xs tracking-[0.08em] uppercase">
-            Phase 1 foundation
-          </span>
+          <Link
+            href="/privacy"
+            className="rounded-sm font-medium text-[var(--text-primary)] underline decoration-[var(--border)] underline-offset-4 hover:decoration-[var(--accent)]"
+          >
+            Privacy
+          </Link>
           <Link
             href="/"
             className="rounded-sm font-medium text-[var(--text-primary)] underline decoration-[var(--border)] underline-offset-4 hover:decoration-[var(--accent)]"

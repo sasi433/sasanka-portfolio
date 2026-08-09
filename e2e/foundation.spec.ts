@@ -6,7 +6,7 @@ test("shared layout and desktop navigation load", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "A clear, accessible interface foundation for the portfolio.",
+    "Senior Software Engineer — Backend, Python, DevOps and Cloud-Native Systems",
   );
   await expect(
     page.getByRole("navigation", { name: "Primary navigation" }),
@@ -14,6 +14,32 @@ test("shared layout and desktop navigation load", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "Open navigation" }),
   ).toBeHidden();
+});
+
+test("all Phase 2 routes and curated work details load", async ({ page }) => {
+  for (const route of [
+    "/about",
+    "/experience",
+    "/work",
+    "/skills",
+    "/contact",
+    "/contact/sent",
+    "/privacy",
+    "/work/production-incident-simulator",
+    "/work/shared-python-libraries",
+  ]) {
+    const response = await page.goto(route);
+    expect(response?.status(), route).toBe(200);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  }
+});
+
+test("unknown work slugs use the custom not-found page", async ({ page }) => {
+  const response = await page.goto("/work/not-a-real-item");
+  expect(response?.status()).toBe(404);
+  await expect(
+    page.getByRole("heading", { name: "That page could not be found." }),
+  ).toBeVisible();
 });
 
 test("dark theme is default and the selected theme persists", async ({

@@ -10,11 +10,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Sasanka Maddala | Portfolio Foundation",
+    default: "Sasanka Maddala | Senior Software Engineer",
     template: "%s | Sasanka Maddala",
   },
   description:
-    "The design-system and platform foundation for Sasanka Maddala's professional portfolio.",
+    "Senior Software Engineer focused on backend, Python, DevOps and cloud-native systems.",
 };
 
 export default function RootLayout({

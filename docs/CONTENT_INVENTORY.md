@@ -1,16 +1,21 @@
 # Content Inventory
 
-This file tracks source material that must be verified before it is published. Through Phase 1, the temporary site intentionally includes no portfolio content beyond the approved public name and neutral foundation messaging.
+This file tracks source material that must be verified before it is published. Public content must come from the approved implementation brief or another explicitly verified source.
 
 ## Required for later phases
 
-- TODO(content): Confirm the dedicated professional email address before the contact phase.
-- TODO(content): Confirm public GitHub and LinkedIn profile URLs.
-- TODO(content): Provide and approve the professional headshot after metadata removal.
-- TODO(content): Verify all role titles and employment date ranges.
 - TODO(content): Verify One Planet Rating role, dates, responsibilities, technologies, and outcomes before inclusion.
-- TODO(content): Approve the final wording and public links for every featured application.
-- TODO(content): Review every sanitised professional case study for confidentiality.
-- TODO(content): Confirm which Beyond Code interests should be published.
+- TODO(content): Perform the final sentence-by-sentence confidentiality review of all sanitised professional case studies before publication.
+- TODO(content): Reconfirm every project status during the Phase 9 release audit.
+
+## Verified inputs received
+
+- Public name, professional headline, biography and professional email address.
+- Public GitHub and LinkedIn profile URLs.
+- Approved professional headshot and repository-relative public path.
+- Ericsson and Volvo Group role wording, date ranges, responsibilities and technologies.
+- Three curated public project repositories, descriptions and current status labels.
+- Four sanitised professional case-study subjects and the Secure Development Awareness highlight.
+- Grouped skills and selected Beyond Code interests.
 
 No unverified item should appear on a public page.
