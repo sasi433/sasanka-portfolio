@@ -24,7 +24,9 @@ export default function SkillsPage() {
               ) : null}
               <div className="mt-5 flex flex-wrap gap-2">
                 {group.skills.map((skill) => (
-                  <Badge key={skill}>{skill}</Badge>
+                  <Badge key={skill} aria-label={`${group.title}: ${skill}`}>
+                    {skill}
+                  </Badge>
                 ))}
               </div>
             </Card>

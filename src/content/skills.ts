@@ -3,10 +3,13 @@ import type { SkillGroup } from "@/content/types";
 export const skillGroups = [
   {
     title: "Programming Languages",
+    description: "Languages used across systems, backend and automation work.",
     skills: ["Python", "C", "C++", "Bash / Shell", "Lua"],
   },
   {
     title: "Backend Engineering",
+    description:
+      "Service and shared-capability design with testing and clear interfaces.",
     skills: [
       "FastAPI",
       "REST APIs",
@@ -20,6 +23,7 @@ export const skillGroups = [
   },
   {
     title: "DevOps and Cloud-Native Delivery",
+    description: "Repeatable build, container and deployment workflows.",
     skills: [
       "Docker",
       "Kubernetes",
@@ -34,6 +38,8 @@ export const skillGroups = [
   },
   {
     title: "Build, Security and Quality",
+    description:
+      "Early feedback, secure awareness and maintainable delivery controls.",
     skills: [
       "Bazel / build configuration",
       "SonarQube",
@@ -46,6 +52,8 @@ export const skillGroups = [
   },
   {
     title: "Linux, Operations and Observability",
+    description:
+      "Production-minded investigation supported by logs and metrics.",
     skills: [
       "Linux",
       "Grafana",
@@ -71,6 +79,8 @@ export const skillGroups = [
   },
   {
     title: "AI-Assisted Engineering",
+    description:
+      "Tools used thoughtfully for implementation, testing and review.",
     skills: [
       "OpenAI Codex",
       "GitHub Copilot",

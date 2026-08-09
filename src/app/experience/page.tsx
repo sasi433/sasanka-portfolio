@@ -53,6 +53,17 @@ export default function ExperiencePage() {
             </div>
           </Card>
         ))}
+        <aside className="rounded-2xl border border-[var(--border)] bg-[var(--accent-soft)] p-6">
+          <Badge>Secure engineering highlight</Badge>
+          <h2 className="mt-4 text-xl font-semibold">
+            Supported Secure Development Awareness as the Team&apos;s Security
+            Master
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--text-secondary)]">
+            A supporting team responsibility focused on secure-development
+            awareness—not a dedicated security engineering or leadership role.
+          </p>
+        </aside>
       </SectionContainer>
     </div>
   );
