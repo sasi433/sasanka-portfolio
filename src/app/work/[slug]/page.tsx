@@ -4,6 +4,7 @@ import { PageIntro } from "@/components/content/page-intro";
 import { Badge } from "@/components/ui/badge";
 import { ExternalLink } from "@/components/ui/external-link";
 import { SectionContainer } from "@/components/ui/section-container";
+import { CaseStudyDiagram } from "@/components/work/case-study-diagram";
 import { getWorkItem, workItems, workStatusLabels } from "@/content/work";
 
 type WorkDetailProps = { params: Promise<{ slug: string }> };
@@ -51,6 +52,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
             </section>
           ))}
           <ListSection title="Approach" values={item.approach} />
+          <CaseStudyDiagram slug={item.slug} />
           <section>
             <h2 className="text-2xl font-semibold">Technical decisions</h2>
             <div className="mt-4 space-y-5">

@@ -29,7 +29,9 @@ test("homepage presents the primary journey and approved profile image", async (
   await expect(
     page.getByRole("heading", { name: "An expanding engineering scope." }),
   ).toBeVisible();
-  await expect(page.getByText("Volvo Group client assignment · 2025–2026")).toBeVisible();
+  await expect(
+    page.getByText("Volvo Group client assignment · 2025–2026"),
+  ).toBeVisible();
 });
 
 test("all Phase 2 routes and curated work details load", async ({ page }) => {
@@ -56,6 +58,31 @@ test("unknown work slugs use the custom not-found page", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "That page could not be found." }),
   ).toBeVisible();
+});
+
+test("work is segmented and external repository links are secure", async ({
+  page,
+}) => {
+  await page.goto("/work");
+  await expect(
+    page.getByRole("heading", { name: "Public projects built to solve and explore." }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Professional work, explained without proprietary detail." }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Active work shown with an honest status." }),
+  ).toBeVisible();
+
+  await page.goto("/work/log-report-automation");
+  const repositoryLink = page.getByRole("link", {
+    name: /View GitHub repository/,
+  });
+  await expect(repositoryLink).toHaveAttribute("target", "_blank");
+  await expect(repositoryLink).toHaveAttribute("rel", /noopener/);
+  await expect(
+    page.getByRole("link", { name: /live application/i }),
+  ).toHaveCount(0);
 });
 
 test("dark theme is default and the selected theme persists", async ({
