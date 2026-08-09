@@ -6,7 +6,7 @@ test("shared layout and desktop navigation load", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Senior Software Engineer — Backend, Python, DevOps and Cloud-Native Systems",
+    "Backend systems built for reliable delivery.",
   );
   await expect(
     page.getByRole("navigation", { name: "Primary navigation" }),
@@ -14,6 +14,22 @@ test("shared layout and desktop navigation load", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "Open navigation" }),
   ).toBeHidden();
+});
+
+test("homepage presents the primary journey and approved profile image", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  await expect(page.getByRole("link", { name: "View My Work" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Contact Me" }).first(),
+  ).toBeVisible();
+  await expect(page.getByAltText("Portrait of Sasanka Maddala")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "An expanding engineering scope." }),
+  ).toBeVisible();
+  await expect(page.getByText("Volvo Group client assignment · 2025–2026")).toBeVisible();
 });
 
 test("all Phase 2 routes and curated work details load", async ({ page }) => {
@@ -89,9 +105,10 @@ test("skip link reaches the main content", async ({ page }) => {
 });
 
 test("required breakpoints have no horizontal overflow", async ({ page }) => {
+  await page.goto("/");
+
   for (const width of [360, 390, 768, 1024, 1280, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto("/");
 
     const dimensions = await page.evaluate(() => ({
       clientWidth: document.documentElement.clientWidth,
