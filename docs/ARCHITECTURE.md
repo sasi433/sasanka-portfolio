@@ -19,6 +19,14 @@ Because OpenNext is not fully compatible with native Windows package symlinks, `
 
 No database, CMS, separate backend, contact provider, analytics service, or Cloudflare resource binding beyond static assets is configured in Phase 0.
 
+## Phase 1 interface foundation
+
+The shared interface uses CSS custom properties for semantic dark and light theme tokens. `next-themes` applies the selected class before hydration, defaults first-time visits to dark, and persists manual selection without following the operating-system preference.
+
+Geist Sans and Geist Mono are loaded from the local `geist` package. The root layout owns the accessible skip link, sticky header, desktop and modal mobile navigation, main-content target, and footer. Focused primitives under `src/components/ui/` provide buttons, cards, badges, external links and section containers for later pages.
+
+The mobile navigation uses the native modal dialog behavior for focus containment and Escape-key dismissal. Shared CSS limits page-entry motion and disables nonessential animation when `prefers-reduced-motion` is active.
+
 ## Configuration ownership
 
 - `next.config.ts`: Next.js configuration and local Cloudflare binding initialization.

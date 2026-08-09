@@ -1,6 +1,6 @@
 # Content Inventory
 
-This file tracks source material that must be verified before it is published. Phase 0 intentionally includes no portfolio content beyond the approved public name and a neutral foundation message.
+This file tracks source material that must be verified before it is published. Through Phase 1, the temporary site intentionally includes no portfolio content beyond the approved public name and neutral foundation messaging.
 
 ## Required for later phases
 

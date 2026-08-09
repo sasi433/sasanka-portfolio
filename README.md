@@ -2,7 +2,7 @@
 
 This repository contains the source for a professional portfolio built with Next.js App Router and deployed to Cloudflare Workers through the OpenNext Cloudflare adapter.
 
-Phase 0 provides only the platform foundation and a temporary landing page. The final content, visual design, routes, contact workflow, accessibility suite, and deployment automation are intentionally deferred to their approved phases in [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
+Phases 0 and 1 provide the platform, theme, shared-layout and reusable-component foundations with a temporary landing page. Final portfolio content, deeper routes, the contact workflow, release-level accessibility coverage and deployment automation remain intentionally deferred to their approved phases in [`docs/IMPLEMENTATION_PLAN.md`](docs/IMPLEMENTATION_PLAN.md).
 
 ## Prerequisites
 
