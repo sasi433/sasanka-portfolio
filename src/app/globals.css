@@ -80,6 +80,22 @@ button {
   font: inherit;
 }
 
+.form-input {
+  width: 100%;
+  min-height: 2.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.625rem;
+  background: var(--background);
+  padding: 0.7rem 0.8rem;
+  color: var(--text-primary);
+  font: inherit;
+}
+
+.form-input:hover,
+.form-input:focus {
+  border-color: var(--accent);
+}
+
 ::selection {
   background: var(--accent);
   color: #ffffff;

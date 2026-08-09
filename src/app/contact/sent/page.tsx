@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { ButtonLink } from "@/components/ui/button";
 import { PageIntro } from "@/components/content/page-intro";
+
+export const metadata: Metadata = {
+  title: "Message sent",
+  robots: { index: false, follow: false },
+};
 
 export default function ContactSentPage() {
   return (

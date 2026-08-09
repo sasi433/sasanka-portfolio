@@ -85,6 +85,21 @@ test("work is segmented and external repository links are secure", async ({
   ).toHaveCount(0);
 });
 
+test("contact form is accessible and safely reports missing external setup", async ({ page, request }) => {
+  await page.goto("/contact");
+  await expect(page.getByLabel("Name")).toBeVisible();
+  await expect(page.getByLabel("Email")).toBeVisible();
+  await expect(page.getByLabel("Subject")).toBeVisible();
+  await expect(page.getByLabel("Message")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Send message" })).toBeDisabled();
+  await expect(page.getByText(/awaiting its anti-bot configuration/i)).toBeVisible();
+
+  const invalid = await request.post("/api/contact", { data: { email: "invalid" } });
+  expect(invalid.status()).toBe(400);
+  const honeypot = await request.post("/api/contact", { data: { name: "Bot Sender", email: "bot@example.com", subject: "Automated message", message: "This message has enough detail to pass validation.", company: "filled", turnstileToken: "not-used" } });
+  expect(honeypot.status()).toBe(202);
+});
+
 test("dark theme is default and the selected theme persists", async ({
   page,
 }) => {
