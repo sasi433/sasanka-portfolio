@@ -4,6 +4,13 @@ import { PageIntro } from "@/components/content/page-intro";
 import { ExternalLink } from "@/components/ui/external-link";
 import { SectionContainer } from "@/components/ui/section-container";
 import { profile } from "@/content/profile";
+import { createPageMetadata } from "@/lib/metadata";
+
+export const metadata = createPageMetadata(
+  "Contact",
+  "Contact Sasanka Maddala to discuss backend engineering, developer tooling or cloud-native delivery.",
+  "/contact",
+);
 
 export default function ContactPage() {
   return (

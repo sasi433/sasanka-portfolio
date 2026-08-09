@@ -3,6 +3,13 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { SectionContainer } from "@/components/ui/section-container";
 import { skillGroups } from "@/content/skills";
+import { createPageMetadata } from "@/lib/metadata";
+
+export const metadata = createPageMetadata(
+  "Skills",
+  "Engineering capabilities across programming, backend systems, DevOps, cloud-native delivery, operations and AI-assisted development.",
+  "/skills",
+);
 
 export default function SkillsPage() {
   return (

@@ -3,6 +3,13 @@ import { Badge } from "@/components/ui/badge";
 import { SectionContainer } from "@/components/ui/section-container";
 import { WorkCard } from "@/components/work/work-card";
 import { workItems } from "@/content/work";
+import { createPageMetadata } from "@/lib/metadata";
+
+export const metadata = createPageMetadata(
+  "Work",
+  "Curated applications and sanitised engineering case studies covering backend systems, delivery automation and troubleshooting.",
+  "/work",
+);
 
 const applications = workItems.filter(
   (item) => item.type === "application" && item.status !== "currently-building",

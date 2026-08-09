@@ -87,13 +87,13 @@ export default function Home() {
               aria-label="Sasanka Maddala on GitHub"
               href={profile.githubUrl}
             >
-                <Code2 aria-hidden="true" className="size-4" /> GitHub
+              <Code2 aria-hidden="true" className="size-4" /> GitHub
             </ExternalLink>
             <ExternalLink
               aria-label="Sasanka Maddala on LinkedIn"
               href={profile.linkedInUrl}
             >
-                <Network aria-hidden="true" className="size-4" /> LinkedIn
+              <Network aria-hidden="true" className="size-4" /> LinkedIn
             </ExternalLink>
           </div>
           <Link
@@ -113,8 +113,8 @@ export default function Home() {
             <Image
               src={profile.headshot.src}
               alt={profile.headshot.alt}
-              width={1254}
-              height={1254}
+              width={900}
+              height={900}
               priority
               sizes="(max-width: 1024px) 85vw, 36vw"
               className="aspect-square w-full rounded-[1.55rem] object-cover"

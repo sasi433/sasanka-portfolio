@@ -18,7 +18,17 @@ export async function generateMetadata({
 }: WorkDetailProps): Promise<Metadata> {
   const item = getWorkItem((await params).slug);
   return item
-    ? { title: item.shortTitle ?? item.title, description: item.summary }
+    ? {
+        title: item.shortTitle ?? item.title,
+        description: item.summary,
+        alternates: { canonical: `/work/${item.slug}` },
+        openGraph: {
+          title: item.shortTitle ?? item.title,
+          description: item.summary,
+          url: `/work/${item.slug}`,
+          type: "article",
+        },
+      }
     : {};
 }
 

@@ -1,5 +1,12 @@
 import { PageIntro } from "@/components/content/page-intro";
 import { SectionContainer } from "@/components/ui/section-container";
+import { createPageMetadata } from "@/lib/metadata";
+
+export const metadata = createPageMetadata(
+  "Privacy",
+  "How contact submissions, abuse prevention and privacy-focused analytics are handled on this portfolio.",
+  "/privacy",
+);
 
 export default function PrivacyPage() {
   return (
@@ -37,8 +44,8 @@ export default function PrivacyPage() {
               Analytics
             </h2>
             <p className="mt-3">
-              Cloudflare Web Analytics is planned to provide privacy-focused
-              aggregate traffic information. No public visitor counter will be
+              When enabled, Cloudflare Web Analytics provides privacy-focused
+              aggregate traffic information. No public visitor counter is
               displayed.
             </p>
           </section>

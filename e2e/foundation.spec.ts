@@ -65,13 +65,19 @@ test("work is segmented and external repository links are secure", async ({
 }) => {
   await page.goto("/work");
   await expect(
-    page.getByRole("heading", { name: "Public projects built to solve and explore." }),
+    page.getByRole("heading", {
+      name: "Public projects built to solve and explore.",
+    }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Professional work, explained without proprietary detail." }),
+    page.getByRole("heading", {
+      name: "Professional work, explained without proprietary detail.",
+    }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", { name: "Active work shown with an honest status." }),
+    page.getByRole("heading", {
+      name: "Active work shown with an honest status.",
+    }),
   ).toBeVisible();
 
   await page.goto("/work/log-report-automation");
@@ -85,18 +91,36 @@ test("work is segmented and external repository links are secure", async ({
   ).toHaveCount(0);
 });
 
-test("contact form is accessible and safely reports missing external setup", async ({ page, request }) => {
+test("contact form is accessible and safely reports missing external setup", async ({
+  page,
+  request,
+}) => {
   await page.goto("/contact");
   await expect(page.getByLabel("Name")).toBeVisible();
   await expect(page.getByLabel("Email")).toBeVisible();
   await expect(page.getByLabel("Subject")).toBeVisible();
   await expect(page.getByLabel("Message")).toBeVisible();
-  await expect(page.getByRole("button", { name: "Send message" })).toBeDisabled();
-  await expect(page.getByText(/awaiting its anti-bot configuration/i)).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Send message" }),
+  ).toBeDisabled();
+  await expect(
+    page.getByText(/awaiting its anti-bot configuration/i),
+  ).toBeVisible();
 
-  const invalid = await request.post("/api/contact", { data: { email: "invalid" } });
+  const invalid = await request.post("/api/contact", {
+    data: { email: "invalid" },
+  });
   expect(invalid.status()).toBe(400);
-  const honeypot = await request.post("/api/contact", { data: { name: "Bot Sender", email: "bot@example.com", subject: "Automated message", message: "This message has enough detail to pass validation.", company: "filled", turnstileToken: "not-used" } });
+  const honeypot = await request.post("/api/contact", {
+    data: {
+      name: "Bot Sender",
+      email: "bot@example.com",
+      subject: "Automated message",
+      message: "This message has enough detail to pass validation.",
+      company: "filled",
+      turnstileToken: "not-used",
+    },
+  });
   expect(honeypot.status()).toBe(202);
 });
 
@@ -182,6 +206,7 @@ test("homepage has no serious automated accessibility violations", async ({
   page,
 }) => {
   await page.goto("/");
+  await waitForPageAnimation(page);
 
   const results = await new AxeBuilder({ page }).analyze();
   const seriousViolations = results.violations.filter(
@@ -190,4 +215,64 @@ test("homepage has no serious automated accessibility violations", async ({
   );
 
   expect(seriousViolations).toEqual([]);
+});
+
+test("core routes have no serious automated accessibility violations", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  for (const route of [
+    "/about",
+    "/experience",
+    "/work",
+    "/skills",
+    "/contact",
+    "/privacy",
+    "/work/shared-python-libraries",
+  ]) {
+    await page.goto(route);
+    await waitForPageAnimation(page);
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(
+      results.violations.filter(
+        (violation) =>
+          violation.impact === "serious" || violation.impact === "critical",
+      ),
+      route,
+    ).toEqual([]);
+  }
+});
+
+async function waitForPageAnimation(page: import("@playwright/test").Page) {
+  await page.locator(".page-shell").evaluate(async (element) => {
+    await Promise.all(
+      element.getAnimations().map((animation) => animation.finished),
+    );
+  });
+}
+
+test("SEO endpoints and preview indexing policy are present", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/work/shared-python-libraries");
+  await expect(page).toHaveTitle(/Shared Python Libraries/);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    "http://localhost:3000/work/shared-python-libraries",
+  );
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+    "content",
+    /noindex/,
+  );
+  await expect(
+    page.locator('script[type="application\/ld\+json"]'),
+  ).toHaveCount(1);
+
+  const sitemap = await request.get("/sitemap.xml");
+  expect(sitemap.status()).toBe(200);
+  expect(await sitemap.text()).toContain("/work/production-incident-simulator");
+  const robots = await request.get("/robots.txt");
+  expect(await robots.text()).toContain("Disallow: /");
+  expect((await request.get("/opengraph-image")).status()).toBe(200);
 });

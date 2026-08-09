@@ -5,6 +5,13 @@ import { Card } from "@/components/ui/card";
 import { SectionContainer } from "@/components/ui/section-container";
 import { experienceItems } from "@/content/experience";
 import { getWorkItem } from "@/content/work";
+import { createPageMetadata } from "@/lib/metadata";
+
+export const metadata = createPageMetadata(
+  "Experience",
+  "Professional experience across Linux telecom systems, Python engineering, CI/CD and cloud-native delivery.",
+  "/experience",
+);
 
 export default function ExperiencePage() {
   return (

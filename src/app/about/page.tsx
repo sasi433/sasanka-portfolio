@@ -2,6 +2,13 @@ import { PageIntro } from "@/components/content/page-intro";
 import { Card } from "@/components/ui/card";
 import { SectionContainer } from "@/components/ui/section-container";
 import { interests } from "@/content/interests";
+import { createPageMetadata } from "@/lib/metadata";
+
+export const metadata = createPageMetadata(
+  "About",
+  "How Sasanka Maddala expanded from systems and telecom engineering into backend, DevOps and cloud-native delivery.",
+  "/about",
+);
 
 export default function AboutPage() {
   return (
