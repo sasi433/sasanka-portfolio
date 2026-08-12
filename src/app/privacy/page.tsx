@@ -16,7 +16,11 @@ export default function PrivacyPage() {
         title="A minimal, purpose-specific privacy approach."
         description="This portfolio is designed to collect only what is necessary for professional communication and basic private traffic measurement."
       />
-      <SectionContainer className="pb-20 sm:pb-24">
+      <SectionContainer
+        id="privacy-details"
+        routeLabel="Privacy details"
+        className="pb-20 sm:pb-24"
+      >
         <div className="max-w-3xl space-y-8 leading-7 text-[var(--text-secondary)]">
           <section>
             <h2 className="text-xl font-semibold text-[var(--text-primary)]">

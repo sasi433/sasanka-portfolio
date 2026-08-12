@@ -67,6 +67,392 @@ body {
     color 160ms ease;
 }
 
+.journey-atmosphere {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.journey-atmosphere::before,
+.journey-atmosphere::after {
+  position: absolute;
+  border-radius: 999px;
+  content: "";
+  filter: blur(10px);
+  will-change: transform;
+}
+
+.journey-atmosphere::before {
+  top: calc(-14rem + var(--route-shift, 0px));
+  right: -12rem;
+  width: 34rem;
+  height: 34rem;
+  background: radial-gradient(circle, var(--accent-soft), transparent 68%);
+  opacity: 0.72;
+}
+
+.journey-atmosphere::after {
+  bottom: calc(-18rem + var(--route-shift, 0px));
+  left: -14rem;
+  width: 30rem;
+  height: 30rem;
+  background: radial-gradient(circle, var(--accent-soft), transparent 68%);
+  opacity: 0.46;
+}
+
+.journey-map {
+  position: fixed;
+  z-index: 30;
+  top: 6.5rem;
+  right: max(0.75rem, calc((100vw - 92rem) / 2));
+  bottom: 2.5rem;
+  display: none;
+  width: 7.5rem;
+  pointer-events: none;
+}
+
+.journey-map svg {
+  position: absolute;
+  top: 0;
+  right: 0.25rem;
+  width: 4.25rem;
+  height: 100%;
+  overflow: visible;
+}
+
+.journey-map-path,
+.journey-map-travelled {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.journey-map-path {
+  stroke: var(--border);
+  stroke-width: 2;
+  stroke-dasharray: 3 8;
+}
+
+.journey-map-travelled {
+  stroke: var(--accent-emphasis);
+  stroke-width: 2.5;
+  transition: stroke-dashoffset 80ms linear;
+}
+
+.journey-map-traveller {
+  fill: var(--background);
+  stroke: var(--accent-emphasis);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+
+.journey-map ol {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0.4rem 0;
+  list-style: none;
+}
+
+.journey-map li {
+  pointer-events: auto;
+}
+
+.journey-map li a {
+  display: grid;
+  width: fit-content;
+  min-width: 2rem;
+  min-height: 2rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--header-background);
+  color: var(--text-secondary);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.65rem;
+  text-decoration: none;
+  backdrop-filter: blur(12px);
+  transition:
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.journey-map li a strong {
+  position: absolute;
+  right: 2.75rem;
+  max-width: 9rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  background: var(--header-background);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), sans-serif;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(0.4rem);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.journey-map li.active a,
+.journey-map li a:hover,
+.journey-map li a:focus-visible {
+  border-color: var(--accent-emphasis);
+  color: var(--accent-emphasis);
+  transform: scale(1.08);
+}
+
+.journey-map li.active a strong,
+.journey-map li a:hover strong,
+.journey-map li a:focus-visible strong {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.journey-map-status {
+  display: none;
+}
+
+.route-stage {
+  position: relative;
+  scroll-margin-top: 6rem;
+}
+
+.route-stage::after {
+  position: absolute;
+  top: 50%;
+  right: 1.25rem;
+  width: 0.45rem;
+  height: 0.45rem;
+  border: 1px solid var(--accent-emphasis);
+  border-radius: 999px;
+  background: var(--background);
+  box-shadow: 0 0 0 0.35rem var(--accent-soft);
+  content: "";
+  opacity: 0.7;
+}
+
+.career-route {
+  position: relative;
+  display: grid;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.career-route::before {
+  position: absolute;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  left: 1.25rem;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-emphasis),
+    var(--accent),
+    var(--border)
+  );
+  content: "";
+}
+
+.career-route-stop {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.career-route-stop article {
+  min-height: 12rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--surface) 96%, transparent),
+    color-mix(in srgb, var(--accent-soft) 50%, var(--surface))
+  );
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+}
+
+.career-route-marker {
+  position: sticky;
+  z-index: 1;
+  top: 7rem;
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 2px solid var(--accent-emphasis);
+  border-radius: 999px;
+  background: var(--background);
+  box-shadow: 0 0 0 0.45rem var(--accent-soft);
+  color: var(--accent-emphasis);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.68rem;
+}
+
+.academic-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    var(--accent-emphasis),
+    var(--accent),
+    transparent 75%
+  );
+  content: "";
+  transform: scaleX(0.28);
+  transform-origin: left;
+  transition: transform 360ms ease;
+}
+
+.academic-card:hover::before,
+.academic-card:focus-within::before {
+  transform: scaleX(1);
+}
+
+.experience-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.25rem;
+}
+
+.experience-stage-index {
+  color: color-mix(in srgb, var(--accent-emphasis) 28%, transparent);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(3rem, 9vw, 7rem);
+  font-weight: 700;
+  line-height: 0.8;
+  letter-spacing: -0.08em;
+}
+
+.experience-panel {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1.75rem;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.experience-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.skill-station {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.skill-station-number {
+  display: grid;
+  min-height: 100%;
+  place-items: start center;
+  border-right: 1px solid var(--border);
+  padding-top: 0.35rem;
+  color: var(--accent-emphasis);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.75rem;
+}
+
+.skill-station-content {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  background: linear-gradient(
+    125deg,
+    color-mix(in srgb, var(--surface) 95%, transparent),
+    color-mix(in srgb, var(--accent-soft) 55%, transparent)
+  );
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.skill-station-content:hover {
+  border-color: var(--accent);
+  transform: translateX(0.35rem);
+}
+
+@media (min-width: 768px) {
+  .skill-station {
+    grid-template-columns: minmax(5rem, 0.2fr) minmax(0, 1fr);
+    gap: 2rem;
+  }
+
+  .skill-station-number {
+    justify-content: end;
+    padding-right: 2rem;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .experience-stage {
+    grid-template-columns: 8rem minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .experience-stage-index {
+    position: sticky;
+    top: 8rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .career-route {
+    gap: 3rem;
+  }
+
+  .career-route::before {
+    left: 50%;
+  }
+
+  .career-route-stop {
+    grid-template-columns: 1fr 3.5rem 1fr;
+    gap: 1.5rem;
+  }
+
+  .career-route-stop:nth-child(odd) article {
+    grid-column: 1;
+    text-align: right;
+  }
+
+  .career-route-stop:nth-child(even) article {
+    grid-column: 3;
+  }
+
+  .career-route-marker {
+    top: 7.5rem;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+  }
+}
+
 button,
 a {
   -webkit-tap-highlight-color: transparent;
@@ -176,6 +562,108 @@ button {
       animation-timeline: view();
       animation-range: entry 0% entry 40%;
     }
+
+    .route-stage > * {
+      animation: route-stage-arrival linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 42%;
+    }
+  }
+}
+
+@keyframes route-stage-arrival {
+  from {
+    opacity: 0.72;
+    transform: translateY(1.15rem) scale(0.992);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (min-width: 1480px) {
+  .journey-map {
+    display: block;
+  }
+
+  .route-stage::after {
+    right: -1rem;
+  }
+}
+
+@media (max-width: 1479px) {
+  .journey-map {
+    top: 4.25rem;
+    right: 0;
+    bottom: auto;
+    display: block;
+    width: 100%;
+    height: 0.22rem;
+  }
+
+  .journey-map svg,
+  .journey-map ol {
+    display: none;
+  }
+
+  .journey-map::before,
+  .journey-map::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    content: "";
+  }
+
+  .journey-map::before {
+    width: 100%;
+    background: var(--border);
+  }
+
+  .journey-map::after {
+    width: calc(var(--route-progress, 0) * 100%);
+    background: var(--accent-emphasis);
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  .journey-map-status {
+    position: absolute;
+    top: 0.55rem;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--header-background);
+    color: var(--text-secondary);
+    font-size: 0.65rem;
+    line-height: 1;
+    backdrop-filter: blur(12px);
+  }
+
+  .journey-map-status span {
+    color: var(--accent-emphasis);
+    font-family: var(--font-geist-mono), monospace;
+  }
+}
+
+@media (max-width: 639px) {
+  .journey-map-status {
+    display: none;
+  }
+
+  .route-stage::after {
+    right: auto;
+    left: 0.15rem;
+  }
+
+  .route-stage {
+    border-left: 1px dashed var(--border);
   }
 }
 
@@ -191,5 +679,11 @@ button {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .journey-map-travelled,
+  .journey-atmosphere::before,
+  .journey-atmosphere::after {
+    transition: none !important;
   }
 }

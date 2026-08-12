@@ -27,6 +27,8 @@ Geist Sans and Geist Mono are loaded from the local `geist` package. The root la
 
 The mobile navigation uses the native modal dialog behavior for focus containment and Escape-key dismissal. Shared CSS limits page-entry motion and disables nonessential animation when `prefers-reduced-motion` is active.
 
+The shared journey layer discovers explicitly labelled page sections and renders a continuous route-progress treatment. Scroll updates are batched through `requestAnimationFrame`; CSS scroll timelines provide progressive section movement where supported. The homepage portrait is observed only to swap the compact header identity after the large portrait leaves view. Normal document scrolling, semantic section order and static fallbacks remain authoritative.
+
 ## Configuration ownership
 
 - `next.config.ts`: Next.js configuration and local Cloudflare binding initialization.

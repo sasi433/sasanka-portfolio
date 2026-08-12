@@ -20,9 +20,18 @@ export default function ContactPage() {
         title="Start a professional conversation."
         description="Interested in discussing software engineering, backend systems, developer tooling or cloud-native delivery? Get in touch."
       />
-      <SectionContainer className="pb-20 sm:pb-24">
+      <SectionContainer
+        id="contact-form"
+        routeLabel="Contact form"
+        className="pb-20 sm:pb-24"
+      >
         <ContactForm />
-        <div className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+        <div
+          id="contact-email"
+          data-route-stop
+          data-route-label="Email"
+          className="mt-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8"
+        >
           <p className="max-w-2xl leading-7 text-[var(--text-secondary)]">
             Prefer email? Use the professional address below.
           </p>

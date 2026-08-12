@@ -31,10 +31,28 @@ export type ExperienceItem = {
   organisation: string;
   role: string;
   dates: string;
+  location?: string;
   context: string;
   contributions: string[];
   technologies: string[];
   relatedWorkSlugs: string[];
+};
+
+export type EducationItem = {
+  degree: string;
+  institution: string;
+  location: string;
+  dates: string;
+  thesis: {
+    title: string;
+    description: string;
+    technologies: string[];
+  };
+};
+
+export type LanguageItem = {
+  language: string;
+  proficiency: string;
 };
 
 export type SkillGroup = {

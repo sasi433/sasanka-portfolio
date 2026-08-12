@@ -37,8 +37,8 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
   if (!item) notFound();
 
   const sections = [
-    { title: "Context", content: item.context },
-    { title: "Problem", content: item.problem },
+    { id: "context", title: "Context", content: item.context },
+    { id: "problem", title: "Problem", content: item.problem },
   ];
 
   return (
@@ -54,16 +54,27 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
         <Badge>{item.statusLabel ?? workStatusLabels[item.status]}</Badge>
         <div className="mt-10 max-w-3xl space-y-12">
           {sections.map((section) => (
-            <section key={section.title}>
+            <section
+              id={section.id}
+              data-route-stop
+              data-route-label={section.title}
+              className="scroll-mt-24"
+              key={section.title}
+            >
               <h2 className="text-2xl font-semibold">{section.title}</h2>
               <p className="mt-4 leading-7 text-[var(--text-secondary)]">
                 {section.content}
               </p>
             </section>
           ))}
-          <ListSection title="Approach" values={item.approach} />
+          <ListSection id="approach" title="Approach" values={item.approach} />
           <CaseStudyDiagram slug={item.slug} />
-          <section>
+          <section
+            id="technical-decisions"
+            data-route-stop
+            data-route-label="Technical decisions"
+            className="scroll-mt-24"
+          >
             <h2 className="text-2xl font-semibold">Technical decisions</h2>
             <div className="mt-4 space-y-5">
               {item.decisions.map((decision) => (
@@ -76,10 +87,23 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
               ))}
             </div>
           </section>
-          <ListSection title="Challenges" values={item.challenges} />
-          <ListSection title="Outcomes" values={item.outcomes} />
-          <ListSection title="Lessons learned" values={item.lessons} />
-          <section>
+          <ListSection
+            id="challenges"
+            title="Challenges"
+            values={item.challenges}
+          />
+          <ListSection id="outcomes" title="Outcomes" values={item.outcomes} />
+          <ListSection
+            id="lessons"
+            title="Lessons learned"
+            values={item.lessons}
+          />
+          <section
+            id="technology-stack"
+            data-route-stop
+            data-route-label="Technology stack"
+            className="scroll-mt-24"
+          >
             <h2 className="text-2xl font-semibold">Technology stack</h2>
             <div className="mt-4 flex flex-wrap gap-2">
               {item.technologies.map((technology) => (
@@ -109,14 +133,21 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
 }
 
 function ListSection({
+  id,
   title,
   values,
 }: {
+  id: string;
   title: string;
   values: readonly string[];
 }) {
   return (
-    <section>
+    <section
+      id={id}
+      data-route-stop
+      data-route-label={title}
+      className="scroll-mt-24"
+    >
       <h2 className="text-2xl font-semibold">{title}</h2>
       <ul className="mt-4 list-disc space-y-2 pl-5 leading-7 text-[var(--text-secondary)]">
         {values.map((value) => (

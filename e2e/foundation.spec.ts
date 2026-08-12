@@ -30,8 +30,73 @@ test("homepage presents the primary journey and approved profile image", async (
     page.getByRole("heading", { name: "An expanding engineering scope." }),
   ).toBeVisible();
   await expect(
-    page.getByText("Volvo Group client assignment · 2025–2026"),
+    page.getByText(/2025–2026 · Volvo Group client assignment/),
   ).toBeVisible();
+  await expect(page.getByText(/Academic foundations/).first()).toBeVisible();
+  await expect(page.getByText(/One Planet Rating/).first()).toBeVisible();
+});
+
+test("scroll journey advances and moves the portrait into the header", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/");
+
+  const identity = page.locator("[data-header-identity]");
+  await expect(identity).toHaveAttribute("data-header-identity", "initials");
+  await expect(
+    page.getByRole("navigation", { name: "Page journey" }),
+  ).toBeAttached();
+
+  await page.locator("#engineering-summary").scrollIntoViewIfNeeded();
+  await expect(identity).toHaveAttribute("data-header-identity", "portrait");
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        Number.parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue(
+            "--route-progress",
+          ),
+        ),
+      ),
+    )
+    .toBeGreaterThan(0);
+
+  await page.locator("#home-intro").scrollIntoViewIfNeeded();
+  await expect(identity).toHaveAttribute("data-header-identity", "initials");
+
+  await page.goto("/about");
+  await expect(identity).toHaveAttribute("data-header-identity", "portrait");
+});
+
+test("verified experience, education, thesis and languages are published", async ({
+  page,
+}) => {
+  await page.goto("/experience");
+  await expect(
+    page.getByRole("heading", { name: "One Planet Rating" }),
+  ).toBeVisible();
+  await expect(page.getByText("July 2018 – February 2019")).toBeVisible();
+  await expect(
+    page.getByText("Backend Developer", { exact: true }),
+  ).toBeVisible();
+
+  await page.goto("/about");
+  await expect(
+    page.getByRole("heading", {
+      name: "M.Sc. Electrical Engineering — Signal Processing",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "Channel Estimation of OFDM by LS and MMSE Methods",
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Jawaharlal Nehru Technological University, Kakinada"),
+  ).toBeVisible();
+  await expect(page.getByText("Swedish")).toBeVisible();
+  await expect(page.getByText("Basic proficiency")).toBeVisible();
 });
 
 test("all Phase 2 routes and curated work details load", async ({ page }) => {
@@ -96,10 +161,18 @@ test("contact form is accessible and safely reports missing external setup", asy
   request,
 }) => {
   await page.goto("/contact");
-  await expect(page.getByLabel("Name")).toBeVisible();
-  await expect(page.getByLabel("Email")).toBeVisible();
-  await expect(page.getByLabel("Subject")).toBeVisible();
-  await expect(page.getByLabel("Message")).toBeVisible();
+  await expect(
+    page.getByRole("textbox", { name: "Name", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("textbox", { name: "Email", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("textbox", { name: "Subject", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("textbox", { name: "Message", exact: true }),
+  ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Send message" }),
   ).toBeDisabled();
@@ -185,6 +258,44 @@ test("required breakpoints have no horizontal overflow", async ({ page }) => {
       `overflow at ${width}px`,
     ).toBeLessThanOrEqual(dimensions.clientWidth);
   }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const route of ["/about", "/experience", "/skills", "/work"]) {
+    await page.goto(route);
+    const dimensions = await page.evaluate(() => ({
+      clientWidth: document.documentElement.clientWidth,
+      scrollWidth: document.documentElement.scrollWidth,
+    }));
+    expect(
+      dimensions.scrollWidth,
+      `overflow on ${route} at 390px`,
+    ).toBeLessThanOrEqual(dimensions.clientWidth);
+  }
+});
+
+test("essential portfolio content remains readable without JavaScript", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", {
+      level: 1,
+      name: "Backend systems built for reliable delivery.",
+    }),
+  ).toBeVisible();
+  await expect(page.getByText(/One Planet Rating/).first()).toBeVisible();
+
+  await page.goto("/about");
+  await expect(
+    page.getByRole("heading", {
+      name: "Channel Estimation of OFDM by LS and MMSE Methods",
+    }),
+  ).toBeVisible();
+
+  await context.close();
 });
 
 test("reduced-motion preference minimizes page animation", async ({ page }) => {

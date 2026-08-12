@@ -66,4 +66,28 @@ export const experienceItems = [
     ],
     relatedWorkSlugs: ["telecom-failure-triage"],
   },
+  {
+    organisation: "One Planet Rating",
+    role: "Backend Developer",
+    dates: "July 2018 – February 2019",
+    location: "Stockholm, Sweden",
+    context:
+      "Worked on backend capabilities for a user-facing product using Python, Django, REST APIs and SQL-based application logic.",
+    contributions: [
+      "Developed Python and Django backend features, REST APIs, authentication flows and SQL-based application logic.",
+      "Applied validation and integration practices to support maintainable delivery.",
+      "Collaborated with product, UX and frontend stakeholders to understand user needs and troubleshoot issues.",
+      "Supported features through implementation, testing and release.",
+    ],
+    technologies: [
+      "Python",
+      "Django",
+      "REST APIs",
+      "SQL",
+      "Authentication",
+      "Backend validation",
+      "Cross-functional delivery",
+    ],
+    relatedWorkSlugs: [],
+  },
 ] satisfies readonly ExperienceItem[];

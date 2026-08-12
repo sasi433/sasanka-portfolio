@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { JourneyProvider } from "@/components/journey/journey-provider";
 import { CloudflareAnalytics } from "@/components/analytics/cloudflare-analytics";
 import { PersonJsonLd } from "@/components/seo/person-json-ld";
 import { SkipLink } from "@/components/ui/skip-link";
@@ -56,15 +57,17 @@ export default function RootLayout({
           storageKey="sasanka-portfolio-theme"
           disableTransitionOnChange
         >
-          <SkipLink />
-          <div className="flex min-h-screen flex-col">
-            <SiteHeader />
-            <main id="main-content" tabIndex={-1} className="flex-1">
-              {children}
-            </main>
-            <SiteFooter />
-          </div>
-          <CloudflareAnalytics />
+          <JourneyProvider>
+            <SkipLink />
+            <div className="relative z-10 flex min-h-screen flex-col">
+              <SiteHeader />
+              <main id="main-content" tabIndex={-1} className="flex-1">
+                {children}
+              </main>
+              <SiteFooter />
+            </div>
+            <CloudflareAnalytics />
+          </JourneyProvider>
         </ThemeProvider>
       </body>
     </html>

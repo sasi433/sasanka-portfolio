@@ -9,7 +9,7 @@ The application presents verified professional experience, manually curated publ
 - Node.js 24 LTS and pnpm 11
 - Next.js 16, React 19 and TypeScript
 - Tailwind CSS with custom dark/light design tokens
-- Motion for restrained, reduced-motion-aware interaction
+- CSS scroll-driven animation and a small Intersection Observer layer for progressive, reduced-motion-aware interaction
 - Zod, React Hook Form, Turnstile, Workers Rate Limiting and Resend
 - Vitest, React Testing Library, Playwright, axe and Lighthouse
 - Cloudflare Workers, OpenNext and Wrangler

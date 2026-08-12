@@ -21,7 +21,7 @@ This document records the local Phase 9 audit. A checked item means the reposito
 - [x] Reviewed public copy against the approved implementation brief.
 - [x] Confirmed Volvo Group is described as a software consultant client engineering assignment, not direct employment.
 - [x] Confirmed the published date ranges are Ericsson: March 2019–March 2025 and Volvo Group: April 2025–June 2026.
-- [x] Confirmed One Planet Rating remains omitted because its role, dates, responsibilities, technologies, and outcomes have not been verified.
+- [x] Confirmed One Planet Rating is published using the role, dates, historical work location, responsibilities and technologies verified by the repository owner on 2026-08-12.
 - [x] Confirmed portfolio-demonstrated frontend skills are labelled separately from professional experience.
 - [x] Confirmed project status labels are explicit; the Document Support RAG Chatbot remains labelled as currently building.
 - [x] Confirmed professional case studies use sanitised descriptions and contain no employer code, screenshots, logs, ticket IDs, registry names, internal URLs, customer names, or proprietary diagrams.
@@ -44,8 +44,9 @@ This document records the local Phase 9 audit. A checked item means the reposito
 
 ## Owner and production checks still required
 
-- [ ] Read every public page and approve the professional wording, project statuses, interests, photograph, and professional email for publication.
-- [ ] Review the linked GitHub and LinkedIn profiles themselves. They may expose location or employment details that the portfolio intentionally omits.
+- [ ] Review the One Planet Rating, education, thesis and language content added after the earlier owner review.
+- [x] Read every public page and approve the professional wording, project statuses, interests, photograph, and professional email for publication.
+- [x] Review the linked GitHub and LinkedIn profiles themselves. They may expose location or employment details that the portfolio intentionally omits.
 - [ ] Authenticate GitHub tooling and confirm the hosted `main` CI workflow passes.
 - [ ] Configure Cloudflare Workers Builds for the private repository and production branch.
 - [ ] Add the required public build variables and encrypted Turnstile/Resend secrets in Cloudflare; do not commit them.
