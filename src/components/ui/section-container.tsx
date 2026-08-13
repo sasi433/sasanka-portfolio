@@ -3,18 +3,14 @@ import { cn } from "@/lib/utils/cn";
 
 export function SectionContainer({
   className,
-  routeLabel,
   ...props
-}: ComponentPropsWithoutRef<"section"> & { routeLabel?: string }) {
+}: ComponentPropsWithoutRef<"section">) {
   return (
     <section
       className={cn(
-        "mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12",
-        routeLabel && "route-stage",
+        "content-section mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12",
         className,
       )}
-      data-route-stop={routeLabel ? "" : undefined}
-      data-route-label={routeLabel}
       {...props}
     />
   );

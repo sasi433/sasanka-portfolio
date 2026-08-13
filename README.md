@@ -9,7 +9,7 @@ The application presents verified professional experience, manually curated publ
 - Node.js 24 LTS and pnpm 11
 - Next.js 16, React 19 and TypeScript
 - Tailwind CSS with custom dark/light design tokens
-- CSS scroll-driven animation and a small Intersection Observer layer for progressive, reduced-motion-aware interaction
+- A procedural hero-video layer and focused Intersection Observer enhancement for progressive, reduced-motion-aware scrollytelling
 - Zod, React Hook Form, Turnstile, Workers Rate Limiting and Resend
 - Vitest, React Testing Library, Playwright, axe and Lighthouse
 - Cloudflare Workers, OpenNext and Wrangler
@@ -24,32 +24,35 @@ pnpm dev
 
 Copy `.dev.vars.example` to the ignored `.dev.vars` only when testing integrations. Never commit real secrets.
 
-OpenNext does not fully support native Windows symlink behavior. On Windows with Docker Desktop running, use `pnpm preview:docker`. Run production deployments through Cloudflare Workers Builds, WSL 2 or another Linux environment.
+OpenNext does not fully support native Windows symlink behavior. On Windows with Docker Desktop running, use `pnpm preview:docker`; the helper copies non-secret source files into the container's Linux filesystem before building and leaves the repository mount read-only. Run production deployments through Cloudflare Workers Builds, WSL 2 or another Linux environment.
 
 ## Commands
 
-| Command                 | Purpose                                              |
-| ----------------------- | ---------------------------------------------------- |
-| `pnpm dev`              | Start the Next.js development server                 |
-| `pnpm start`            | Serve an existing production build                   |
-| `pnpm build`            | Create a production Next.js build                    |
-| `pnpm build:cloudflare` | Build the Cloudflare Worker with OpenNext            |
-| `pnpm preview`          | Build and preview through OpenNext/Wrangler          |
-| `pnpm preview:docker`   | Run the OpenNext preview in Node 24 Linux on Windows |
-| `pnpm deploy`           | Build and deploy immediately to Cloudflare           |
-| `pnpm upload`           | Build and upload a version without promoting it      |
-| `pnpm deploy:dry-run`   | Validate the generated Wrangler upload bundle        |
-| `pnpm lint`             | Run ESLint                                           |
-| `pnpm typecheck`        | Run TypeScript without emitting files                |
-| `pnpm test`             | Run unit, component and server tests                 |
-| `pnpm test:e2e`         | Run Playwright browser and accessibility tests       |
-| `pnpm audit:lighthouse` | Audit the local production homepage                  |
-| `pnpm format`           | Format files with Prettier                           |
-| `pnpm format:check`     | Verify formatting without writing                    |
+| Command                  | Purpose                                                    |
+| ------------------------ | ---------------------------------------------------------- |
+| `pnpm dev`               | Start the Next.js development server                       |
+| `pnpm start`             | Serve an existing production build                         |
+| `pnpm build`             | Create a production Next.js build                          |
+| `pnpm build:cloudflare`  | Build the Cloudflare Worker with OpenNext                  |
+| `pnpm preview`           | Build and preview through OpenNext/Wrangler                |
+| `pnpm preview:docker`    | Run the OpenNext preview in Node 24 Linux on Windows       |
+| `pnpm deploy`            | Build and deploy immediately to Cloudflare                 |
+| `pnpm upload`            | Build and upload a version without promoting it            |
+| `pnpm deploy:dry-run`    | Validate the generated Wrangler upload bundle              |
+| `pnpm lint`              | Run ESLint                                                 |
+| `pnpm typecheck`         | Run TypeScript without emitting files                      |
+| `pnpm test`              | Run unit, component and server tests                       |
+| `pnpm test:e2e`          | Run Playwright browser and accessibility tests             |
+| `pnpm audit:lighthouse`  | Audit the local production homepage                        |
+| `pnpm media:hero:frames` | Regenerate the source frames and poster for the hero media |
+| `pnpm format`            | Format files with Prettier                                 |
+| `pnpm format:check`      | Verify formatting without writing                          |
 
 ## Architecture
 
-The App Router uses React Server Components by default. Client components are limited to theme selection, mobile navigation, career animation and contact-form interaction. Typed files under `src/content` provide the public portfolio content and reusable work-detail model.
+The App Router uses React Server Components by default. Client components are limited to theme selection, navigation, the hero-media controls, homepage story transitions and contact-form interaction. Typed files under `src/content` provide the public portfolio content and reusable work-detail model.
+
+The homepage hero uses an original, muted engineering sequence generated by `scripts/render-hero-video.mjs`. The committed WebM and MP4 files are decorative, sit behind a strong readability scrim and use a static poster on compact viewports, Save-Data connections and reduced-motion preferences. The source-frame directory is generated under the ignored `.tools` folder.
 
 `POST /api/contact` validates input server-side, rejects honeypots silently, verifies Turnstile, applies the Workers rate-limit binding and delivers plain-text and HTML email through Resend. Messages are not stored in a database and provider internals are not returned to visitors.
 

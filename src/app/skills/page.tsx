@@ -24,7 +24,6 @@ export default function SkillsPage() {
           return (
             <SectionContainer
               id={id}
-              routeLabel={group.title}
               className="skill-station pb-16 sm:pb-20"
               key={group.title}
             >

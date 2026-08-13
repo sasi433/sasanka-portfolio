@@ -16,7 +16,7 @@ test("shared layout and desktop navigation load", async ({ page }) => {
   ).toBeHidden();
 });
 
-test("homepage presents the primary journey and approved profile image", async ({
+test("homepage presents the primary story and approved profile image", async ({
   page,
 }) => {
   await page.goto("/");
@@ -29,14 +29,11 @@ test("homepage presents the primary journey and approved profile image", async (
   await expect(
     page.getByRole("heading", { name: "An expanding engineering scope." }),
   ).toBeVisible();
-  await expect(
-    page.getByText(/2025–2026 · Volvo Group client assignment/),
-  ).toBeVisible();
   await expect(page.getByText(/Academic foundations/).first()).toBeVisible();
-  await expect(page.getByText(/One Planet Rating/).first()).toBeVisible();
+  await expect(page.getByText(/One Planet Rating/).first()).toBeAttached();
 });
 
-test("scroll journey advances and moves the portrait into the header", async ({
+test("hero motion and scroll stories remain controlled and move the portrait into the header", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
@@ -46,21 +43,28 @@ test("scroll journey advances and moves the portrait into the header", async ({
   await expect(identity).toHaveAttribute("data-header-identity", "initials");
   await expect(
     page.getByRole("navigation", { name: "Page journey" }),
-  ).toBeAttached();
+  ).toHaveCount(0);
+
+  const motionControl = page.getByRole("button", {
+    name: "Pause background animation",
+  });
+  await expect(page.locator(".hero-stage__video")).toBeAttached();
+  await expect(motionControl).toBeVisible();
+  await motionControl.click();
+  await expect(
+    page.getByRole("button", { name: "Play background animation" }),
+  ).toBeVisible();
 
   await page.locator("#engineering-summary").scrollIntoViewIfNeeded();
   await expect(identity).toHaveAttribute("data-header-identity", "portrait");
-  await expect
-    .poll(() =>
-      page.evaluate(() =>
-        Number.parseFloat(
-          getComputedStyle(document.documentElement).getPropertyValue(
-            "--route-progress",
-          ),
-        ),
-      ),
-    )
-    .toBeGreaterThan(0);
+
+  const engineeringTriggers = page.locator(
+    "#engineering-summary .scroll-story__trigger",
+  );
+  await engineeringTriggers.nth(2).scrollIntoViewIfNeeded();
+  await expect(
+    page.locator("#engineering-summary .scroll-story__scene.is-active"),
+  ).toContainText("Cloud-Native Delivery");
 
   await page.locator("#home-intro").scrollIntoViewIfNeeded();
   await expect(identity).toHaveAttribute("data-header-identity", "initials");
@@ -311,6 +315,13 @@ test("reduced-motion preference minimizes page animation", async ({ page }) => {
         : Number.parseFloat(duration) * 1000;
     });
   expect(animationDurationMs).toBeLessThanOrEqual(0.01);
+  await expect(page.locator(".hero-stage__video")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: /background animation/i }),
+  ).toHaveCount(0);
+  await expect(page.locator("#engineering-summary")).not.toHaveClass(
+    /is-enhanced/,
+  );
 });
 
 test("homepage has no serious automated accessibility violations", async ({

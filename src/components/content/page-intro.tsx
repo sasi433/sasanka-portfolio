@@ -19,11 +19,7 @@ export function PageIntro({
 }: PageIntroProps) {
   const id = routeId ?? `${eyebrow.toLowerCase().replaceAll(" ", "-")}-intro`;
   return (
-    <SectionContainer
-      id={id}
-      routeLabel={eyebrow}
-      className="py-16 sm:py-20 lg:py-24"
-    >
+    <SectionContainer id={id} className="py-16 sm:py-20 lg:py-24">
       <div className="max-w-3xl">
         <Badge>{eyebrow}</Badge>
         <h1 className="mt-6 text-4xl leading-[1.08] font-semibold tracking-[-0.04em] text-[var(--text-primary)] sm:text-5xl">

@@ -22,11 +22,7 @@ export default function AboutPage() {
         description="I am a senior software engineer with more than six years of experience across backend development, Linux-based systems, telecom software, automation, CI/CD and cloud-native delivery."
       />
 
-      <SectionContainer
-        id="engineering-story"
-        routeLabel="Engineering story"
-        className="pb-20 sm:pb-24"
-      >
+      <SectionContainer id="engineering-story" className="pb-20 sm:pb-24">
         <div className="grid gap-10 lg:grid-cols-[0.72fr_0.28fr]">
           <div className="space-y-5 text-base leading-7 text-[var(--text-secondary)]">
             <p>
@@ -67,11 +63,7 @@ export default function AboutPage() {
         </div>
       </SectionContainer>
 
-      <SectionContainer
-        id="education"
-        routeLabel="Education"
-        className="pb-20 sm:pb-24"
-      >
+      <SectionContainer id="education" className="pb-20 sm:pb-24">
         <div className="max-w-3xl">
           <p className="font-mono text-xs tracking-[0.14em] text-[var(--accent-emphasis)] uppercase">
             Academic foundations
@@ -123,11 +115,7 @@ export default function AboutPage() {
         </div>
       </SectionContainer>
 
-      <SectionContainer
-        id="languages"
-        routeLabel="Languages"
-        className="pb-20 sm:pb-24"
-      >
+      <SectionContainer id="languages" className="pb-20 sm:pb-24">
         <div className="flex items-center gap-3">
           <Languages
             aria-hidden="true"
@@ -150,11 +138,7 @@ export default function AboutPage() {
         </div>
       </SectionContainer>
 
-      <SectionContainer
-        id="beyond-code"
-        routeLabel="Beyond code"
-        className="pb-20 sm:pb-24"
-      >
+      <SectionContainer id="beyond-code" className="pb-20 sm:pb-24">
         <h2 className="text-2xl font-semibold">Beyond code</h2>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {interests.map((interest) => (

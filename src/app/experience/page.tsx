@@ -27,7 +27,6 @@ export default function ExperiencePage() {
         return (
           <SectionContainer
             id={id}
-            routeLabel={item.organisation}
             className="experience-stage pb-20 sm:pb-28"
             key={`${item.organisation}-${item.role}`}
           >
@@ -118,11 +117,7 @@ export default function ExperiencePage() {
         );
       })}
 
-      <SectionContainer
-        id="secure-development"
-        routeLabel="Secure development"
-        className="pb-20 sm:pb-24"
-      >
+      <SectionContainer id="secure-development" className="pb-20 sm:pb-24">
         <aside className="rounded-2xl border border-[var(--border)] bg-[var(--accent-soft)] p-6 sm:p-8">
           <ShieldCheck
             aria-hidden="true"

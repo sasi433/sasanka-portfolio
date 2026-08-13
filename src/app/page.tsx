@@ -1,52 +1,45 @@
-import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowDown,
-  Boxes,
-  CloudCog,
-  Code2,
-  Network,
-  SearchCheck,
-  ServerCog,
-} from "lucide-react";
-import { CareerJourney } from "@/components/home/career-journey";
+import { careerStoryItems } from "@/components/home/career-journey";
+import { HeroStage } from "@/components/home/hero-stage";
+import { ScrollStory, type StoryItem } from "@/components/home/scroll-story";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { ExternalLink } from "@/components/ui/external-link";
 import { SectionContainer } from "@/components/ui/section-container";
 import { WorkCard } from "@/components/work/work-card";
 import { interests } from "@/content/interests";
-import { profile } from "@/content/profile";
 import { skillGroups } from "@/content/skills";
 import { workItems } from "@/content/work";
 
 const pillars = [
   {
-    icon: ServerCog,
+    kicker: "Services and interfaces",
+    icon: "backend",
     title: "Backend and Python Engineering",
     description:
       "Maintainable services, reusable libraries and clear interfaces that reduce reinvention.",
   },
   {
-    icon: Boxes,
+    kicker: "From commit to release",
+    icon: "tooling",
     title: "CI/CD and Developer Tooling",
     description:
       "Build and delivery workflows that fail early, communicate clearly and support teams.",
   },
   {
-    icon: CloudCog,
+    kicker: "Runtime and operations",
+    icon: "cloud",
     title: "Cloud-Native Delivery",
     description:
       "Container workflows and Kubernetes/OpenShift delivery shaped by operational needs.",
   },
   {
-    icon: SearchCheck,
+    kicker: "Evidence before assumptions",
+    icon: "reliability",
     title: "Production Troubleshooting",
     description:
       "Structured triage, evidence analysis and practical collaboration across system boundaries.",
   },
-] as const;
+] as const satisfies readonly StoryItem[];
 
 const impacts = [
   "Shared Python capabilities with clearer ownership and less duplication",
@@ -64,120 +57,27 @@ export default function Home() {
 
   return (
     <div className="page-shell">
-      <SectionContainer
-        id="home-intro"
-        routeLabel="Introduction"
-        className="grid min-h-[calc(100svh-4.5rem)] items-center gap-12 py-16 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.68fr)] lg:py-20"
-      >
-        <div className="max-w-3xl">
-          <Badge>Senior Software Engineer</Badge>
-          <h1 className="mt-6 text-4xl leading-[1.03] font-semibold tracking-[-0.045em] sm:text-5xl lg:text-6xl xl:text-7xl">
-            Backend systems built for{" "}
-            <span className="text-[var(--accent-emphasis)]">
-              reliable delivery.
-            </span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-base leading-7 text-[var(--text-secondary)] sm:text-lg sm:leading-8">
-            {profile.summary}
-          </p>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/work">View My Work</ButtonLink>
-            <ButtonLink href="/contact" variant="secondary">
-              Contact Me
-            </ButtonLink>
-          </div>
-          <div className="mt-5 flex gap-2">
-            <ExternalLink
-              aria-label="Sasanka Maddala on GitHub"
-              href={profile.githubUrl}
-            >
-              <Code2 aria-hidden="true" className="size-4" /> GitHub
-            </ExternalLink>
-            <ExternalLink
-              aria-label="Sasanka Maddala on LinkedIn"
-              href={profile.linkedInUrl}
-            >
-              <Network aria-hidden="true" className="size-4" /> LinkedIn
-            </ExternalLink>
-          </div>
-          <Link
-            href="#engineering-summary"
-            className="mt-9 inline-flex min-h-11 items-center gap-2 text-sm text-[var(--text-secondary)]"
-          >
-            Explore the portfolio{" "}
-            <ArrowDown aria-hidden="true" className="size-4" />
-          </Link>
-        </div>
-        <div data-hero-portrait className="relative mx-auto w-full max-w-md">
-          <div
-            aria-hidden="true"
-            className="absolute -inset-5 rounded-[2rem] bg-[var(--accent-soft)] opacity-70 blur-2xl"
-          />
-          <div className="relative overflow-hidden rounded-[2rem] border border-[var(--border)] bg-[var(--surface)] p-2 shadow-[0_24px_80px_var(--shadow)]">
-            <Image
-              src={profile.headshot.src}
-              alt={profile.headshot.alt}
-              width={900}
-              height={900}
-              priority
-              loading="eager"
-              sizes="(max-width: 1024px) 85vw, 36vw"
-              className="aspect-square w-full rounded-[1.55rem] object-cover"
-            />
-          </div>
-        </div>
-      </SectionContainer>
+      <HeroStage />
 
-      <SectionContainer
+      <ScrollStory
         id="engineering-summary"
-        routeLabel="Engineering focus"
-        aria-labelledby="engineering-summary-heading"
-        className="py-20 sm:py-24"
-      >
-        <SectionHeading
-          eyebrow="Engineering focus"
-          title="Broad systems experience, connected by reliability."
-          id="engineering-summary-heading"
-        />
-        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {pillars.map(({ icon: Icon, ...pillar }) => (
-            <Card key={pillar.title}>
-              <Icon
-                aria-hidden="true"
-                className="size-5 text-[var(--accent-emphasis)]"
-              />
-              <h3 className="mt-5 text-lg font-semibold">{pillar.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                {pillar.description}
-              </p>
-            </Card>
-          ))}
-        </div>
-      </SectionContainer>
+        eyebrow="Engineering focus"
+        title="Broad systems experience, connected by reliability."
+        description="Each change in focus is a different part of the same delivery system—from maintainable services to dependable operations."
+        items={pillars}
+      />
 
-      <SectionContainer
+      <ScrollStory
         id="career-journey"
-        routeLabel="Career journey"
-        aria-labelledby="journey-heading"
-        className="py-20 sm:py-24"
-      >
-        <SectionHeading
-          eyebrow="Career journey"
-          title="An expanding engineering scope."
-          id="journey-heading"
-          description="Systems fundamentals remain the foundation as the work grows across backend engineering, automation and cloud-native delivery."
-        />
-        <div className="mt-12">
-          <CareerJourney />
-        </div>
-        <ButtonLink href="/experience" variant="secondary" className="mt-10">
-          Explore experience
-        </ButtonLink>
-      </SectionContainer>
+        eyebrow="Career journey"
+        title="An expanding engineering scope."
+        description="Systems fundamentals remain the foundation as the work grows across backend engineering, automation and cloud-native delivery."
+        items={careerStoryItems}
+        cta={{ href: "/experience", label: "Explore experience" }}
+      />
 
       <SectionContainer
         id="featured-work"
-        routeLabel="Featured work"
         aria-labelledby="featured-heading"
         className="py-20 sm:py-24"
       >
@@ -210,7 +110,6 @@ export default function Home() {
 
       <SectionContainer
         id="engineering-impact"
-        routeLabel="Engineering impact"
         aria-labelledby="impact-heading"
         className="py-20 sm:py-24"
       >
@@ -233,7 +132,6 @@ export default function Home() {
 
       <SectionContainer
         id="skills-summary"
-        routeLabel="Skills"
         aria-labelledby="skills-heading"
         className="py-20 sm:py-24"
       >
@@ -262,7 +160,6 @@ export default function Home() {
 
       <SectionContainer
         id="beyond-code"
-        routeLabel="Beyond code"
         aria-labelledby="beyond-heading"
         className="py-20 sm:py-24"
       >
@@ -284,11 +181,7 @@ export default function Home() {
         </ButtonLink>
       </SectionContainer>
 
-      <SectionContainer
-        id="contact-destination"
-        routeLabel="Contact"
-        className="py-20 sm:py-24"
-      >
+      <SectionContainer id="contact-destination" className="py-20 sm:py-24">
         <div className="rounded-[2rem] border border-[var(--border)] bg-[var(--accent-soft)] p-7 sm:p-10">
           <p className="font-mono text-xs tracking-[0.12em] text-[var(--accent-emphasis)] uppercase">
             Let&apos;s talk

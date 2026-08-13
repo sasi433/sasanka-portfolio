@@ -47,11 +47,7 @@ export default function WorkPage() {
         title="Active work shown with an honest status."
         items={currentlyBuilding}
       />
-      <SectionContainer
-        id="secure-engineering"
-        routeLabel="Secure engineering"
-        className="pb-20 sm:pb-24"
-      >
+      <SectionContainer id="secure-engineering" className="pb-20 sm:pb-24">
         <div className="rounded-2xl border border-[var(--border)] bg-[var(--accent-soft)] p-6 sm:p-8">
           <Badge>Secure engineering highlight</Badge>
           <h2 className="mt-4 text-xl font-semibold">
@@ -83,7 +79,6 @@ function WorkSection({
   return (
     <SectionContainer
       id={id}
-      routeLabel={eyebrow}
       aria-labelledby={`${id}-heading`}
       className="pb-20 sm:pb-24"
     >

@@ -13,9 +13,9 @@ Browser
       -> static assets through the ASSETS binding
 ```
 
-Local development uses the normal Next.js Node.js server for fast iteration. `initOpenNextCloudflareForDev()` prepares Cloudflare bindings for that development mode. `pnpm preview` performs the production-like OpenNext build and serves it through local `workerd` via Wrangler.
+Local development uses the normal Next.js Node.js server for fast iteration. `initOpenNextCloudflareForDev()` is scoped to development mode and prepares Cloudflare bindings only for that workflow. `pnpm preview` performs the production-like OpenNext build and serves it through local `workerd` via Wrangler.
 
-Because OpenNext is not fully compatible with native Windows package symlinks, `pnpm preview:docker` runs the same locked OpenNext preview workflow in a Node.js 24 Linux container. Production deployment remains assigned to Linux-based Cloudflare Workers Builds.
+Because OpenNext is not fully compatible with native Windows package symlinks, `pnpm preview:docker` copies non-secret source files from a read-only repository mount into a Node.js 24 container filesystem, then runs the same locked OpenNext preview workflow there. Production deployment remains assigned to Linux-based Cloudflare Workers Builds.
 
 No database, CMS or separate backend is used.
 
@@ -27,7 +27,7 @@ Geist Sans and Geist Mono are loaded from the local `geist` package. The root la
 
 The mobile navigation uses the native modal dialog behavior for focus containment and Escape-key dismissal. Shared CSS limits page-entry motion and disables nonessential animation when `prefers-reduced-motion` is active.
 
-The shared journey layer discovers explicitly labelled page sections and renders a continuous route-progress treatment. Scroll updates are batched through `requestAnimationFrame`; CSS scroll timelines provide progressive section movement where supported. The homepage portrait is observed only to swap the compact header identity after the large portrait leaves view. Normal document scrolling, semantic section order and static fallbacks remain authoritative.
+The homepage uses two focused scroll-story chapters. On sufficiently large viewports, a small Intersection Observer enhancement keeps each chapter stage stable while its semantic cards crossfade as normal document scroll reaches invisible trigger regions. Compact viewports, reduced-motion preferences and unavailable JavaScript receive the same content as a static card sequence. There is no scroll hijacking or global route overlay. The homepage portrait is observed separately only to swap the compact header identity after the large portrait leaves view.
 
 ## Configuration ownership
 
@@ -57,7 +57,7 @@ Secrets are accessed only in the route handler. The visitor's address is reply-t
 
 Route-specific metadata, canonical links, Person JSON-LD, a generated Open Graph image, sitemap and environment-sensitive robots rules live in the App Router. Preview builds emit `noindex`; production indexing requires an explicit build-time environment value. Cloudflare Web Analytics loads only when its public token exists.
 
-The approved headshot is metadata-stripped and resized for its maximum rendered size. Next.js Image supplies responsive delivery. Client JavaScript is limited to interactions that need browser state, and all animation respects reduced-motion preferences.
+The approved headshot is metadata-stripped and resized for its maximum rendered size. Next.js Image supplies responsive delivery. The original hero media is a short, silent procedural engineering sequence with WebM and MP4 encodes plus a static poster. The video is progressively enabled only on larger viewports without Save-Data or reduced-motion preferences, and visitors can pause it. Client JavaScript is limited to interactions that need browser state.
 
 ## Delivery ownership
 

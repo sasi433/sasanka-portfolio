@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useJourney } from "@/components/journey/journey-provider";
+import { useHeaderIdentity } from "@/components/layout/header-identity-provider";
 import { DesktopNavigation } from "@/components/layout/desktop-navigation";
 import { MobileNavigation } from "@/components/layout/mobile-navigation";
 
 export function SiteHeader() {
-  const { showHeaderPortrait } = useJourney();
+  const { showHeaderPortrait } = useHeaderIdentity();
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--header-background)] backdrop-blur-xl">

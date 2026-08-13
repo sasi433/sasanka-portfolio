@@ -20,11 +20,7 @@ export default function ContactPage() {
         title="Start a professional conversation."
         description="Interested in discussing software engineering, backend systems, developer tooling or cloud-native delivery? Get in touch."
       />
-      <SectionContainer
-        id="contact-form"
-        routeLabel="Contact form"
-        className="pb-20 sm:pb-24"
-      >
+      <SectionContainer id="contact-form" className="pb-20 sm:pb-24">
         <ContactForm />
         <div
           id="contact-email"
