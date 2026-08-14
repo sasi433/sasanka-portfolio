@@ -49,6 +49,9 @@ test("hero motion and scroll stories remain controlled and move the portrait int
     name: "Pause background animation",
   });
   await expect(page.locator(".hero-stage__video")).toBeAttached();
+  await expect(
+    page.locator(".hero-stage__video source").first(),
+  ).toHaveAttribute("src", "/media/hero-engineering-dark.webm");
   await expect(motionControl).toBeVisible();
   await motionControl.click();
   await expect(
@@ -65,6 +68,9 @@ test("hero motion and scroll stories remain controlled and move the portrait int
   await expect(
     page.locator("#engineering-summary .scroll-story__scene.is-active"),
   ).toContainText("Cloud-Native Delivery");
+  await expect(
+    page.locator("#engineering-summary .scroll-story__scene").nth(3),
+  ).toHaveCSS("opacity", "0");
 
   await page.locator("#home-intro").scrollIntoViewIfNeeded();
   await expect(identity).toHaveAttribute("data-header-identity", "initials");
@@ -209,6 +215,24 @@ test("dark theme is default and the selected theme persists", async ({
   await expect(page.locator("html")).toHaveClass(/dark/);
   await page.getByRole("button", { name: "Switch to light theme" }).click();
   await expect(page.locator("html")).toHaveClass(/light/);
+  await expect(
+    page.locator(".hero-stage__video source").first(),
+  ).toHaveAttribute("src", "/media/hero-engineering-light.webm");
+  await expect
+    .poll(() =>
+      page
+        .locator(".work-card p")
+        .first()
+        .evaluate((element) => getComputedStyle(element).color),
+    )
+    .toBe("rgb(80, 84, 90)");
+  const lightThemeAccessibility = await new AxeBuilder({ page }).analyze();
+  expect(
+    lightThemeAccessibility.violations.filter(
+      (violation) =>
+        violation.impact === "serious" || violation.impact === "critical",
+    ),
+  ).toEqual([]);
   await expect
     .poll(() =>
       page.evaluate(() => localStorage.getItem("sasanka-portfolio-theme")),
@@ -217,6 +241,100 @@ test("dark theme is default and the selected theme persists", async ({
 
   await page.reload();
   await expect(page.locator("html")).toHaveClass(/light/);
+});
+
+test("visual storytelling uses distinct scene tones and image-led skill and interest chapters", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/");
+
+  await expect(
+    page.locator("#beyond-code .interest-card img").first(),
+  ).toHaveAttribute("src", /gaming-v2\.webp/);
+
+  const career = page.locator("#career-journey");
+  await expect(career.locator(".scroll-story__visual").first()).toBeAttached();
+  const triggers = career.locator(".scroll-story__trigger");
+  await triggers.nth(1).scrollIntoViewIfNeeded();
+  await expect(career).toHaveAttribute("data-active-tone", "green");
+
+  await page.goto("/skills");
+  const skillsStory = page.locator("#skills-story");
+  await expect(skillsStory.locator(".media-scroll-story__scene")).toHaveCount(
+    7,
+  );
+  await expect(
+    skillsStory.locator(".media-scroll-story__scene").first().locator("img"),
+  ).toHaveAttribute("src", /programming-languages-v2\.webp/);
+  await skillsStory
+    .locator(".media-scroll-story__trigger")
+    .nth(2)
+    .scrollIntoViewIfNeeded();
+  await expect(
+    skillsStory.locator(".media-scroll-story__scene.is-active"),
+  ).toContainText("DevOps and Cloud-Native Delivery");
+  await expect(
+    skillsStory.locator(".media-scroll-story__scene.is-active img"),
+  ).toBeVisible();
+  await expect(
+    skillsStory.locator(".media-scroll-story__scene.is-active"),
+  ).toHaveAttribute("data-placement", "top-left");
+  const firstSkillBadge = skillsStory
+    .locator(
+      ".media-scroll-story__scene.is-active .media-scroll-story__badges > *",
+    )
+    .first();
+  const secondSkillBadge = skillsStory
+    .locator(
+      ".media-scroll-story__scene.is-active .media-scroll-story__badges > *",
+    )
+    .nth(1);
+  const firstSkillBox = await firstSkillBadge.boundingBox();
+  const secondSkillBox = await secondSkillBadge.boundingBox();
+  expect(secondSkillBox?.y).toBeGreaterThan(firstSkillBox?.y ?? 0);
+  expect(
+    Math.abs((secondSkillBox?.x ?? 0) - (firstSkillBox?.x ?? 0)),
+  ).toBeLessThan(2);
+  await expect(
+    skillsStory.locator(
+      ".media-scroll-story__scene.is-active .media-scroll-story__copy",
+    ),
+  ).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(
+    skillsStory.locator(".media-scroll-story__scene.is-active"),
+  ).not.toHaveCSS("box-shadow", "none");
+  await expect(
+    skillsStory.locator(".media-scroll-story__scene").nth(0),
+  ).toHaveCSS("visibility", "hidden");
+
+  await page.goto("/about");
+  const beyondCode = page.locator("#beyond-code");
+  await expect(beyondCode.locator(".media-scroll-story__scene")).toHaveCount(8);
+  await beyondCode
+    .locator(".media-scroll-story__trigger")
+    .nth(1)
+    .scrollIntoViewIfNeeded();
+  await expect(
+    beyondCode.locator(".media-scroll-story__scene.is-active"),
+  ).toContainText("Technology and gadgets");
+  await expect(
+    beyondCode.locator(".media-scroll-story__scene.is-active img"),
+  ).toBeVisible();
+  await expect(
+    beyondCode.locator(
+      ".media-scroll-story__scene.is-active .media-scroll-story__copy",
+    ),
+  ).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(
+    page.getByAltText(
+      "A dark SUV shown alongside mechanical engineering drawings",
+    ),
+  ).toBeAttached();
+
+  const beyondBox = await page.locator("#beyond-code-heading").boundingBox();
+  const languagesBox = await page.locator("#languages").boundingBox();
+  expect(beyondBox?.y).toBeLessThan(languagesBox?.y ?? 0);
 });
 
 test("mobile navigation manages focus and closes with Escape", async ({
@@ -297,6 +415,11 @@ test("essential portfolio content remains readable without JavaScript", async ({
     page.getByRole("heading", {
       name: "Channel Estimation of OFDM by LS and MMSE Methods",
     }),
+  ).toBeVisible();
+
+  await page.goto("/skills");
+  await expect(
+    page.getByRole("heading", { name: "AI-Assisted Engineering" }),
   ).toBeVisible();
 
   await context.close();

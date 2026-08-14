@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { careerStoryItems } from "@/components/home/career-journey";
 import { HeroStage } from "@/components/home/hero-stage";
+import { InterestGallery } from "@/components/content/interest-gallery";
 import { ScrollStory, type StoryItem } from "@/components/home/scroll-story";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
@@ -17,6 +18,8 @@ const pillars = [
     title: "Backend and Python Engineering",
     description:
       "Maintainable services, reusable libraries and clear interfaces that reduce reinvention.",
+    visual: "services",
+    tone: "blue",
   },
   {
     kicker: "From commit to release",
@@ -24,6 +27,8 @@ const pillars = [
     title: "CI/CD and Developer Tooling",
     description:
       "Build and delivery workflows that fail early, communicate clearly and support teams.",
+    visual: "pipeline",
+    tone: "burgundy",
   },
   {
     kicker: "Runtime and operations",
@@ -31,6 +36,8 @@ const pillars = [
     title: "Cloud-Native Delivery",
     description:
       "Container workflows and Kubernetes/OpenShift delivery shaped by operational needs.",
+    visual: "infrastructure",
+    tone: "green",
   },
   {
     kicker: "Evidence before assumptions",
@@ -38,6 +45,8 @@ const pillars = [
     title: "Production Troubleshooting",
     description:
       "Structured triage, evidence analysis and practical collaboration across system boundaries.",
+    visual: "diagnostics",
+    tone: "amber",
   },
 ] as const satisfies readonly StoryItem[];
 
@@ -106,6 +115,11 @@ export default function Home() {
             </Link>
           </div>
         ) : null}
+        <div className="section-cta">
+          <ButtonLink href="/work" variant="secondary">
+            View all work
+          </ButtonLink>
+        </div>
       </SectionContainer>
 
       <SectionContainer
@@ -153,9 +167,11 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <ButtonLink href="/skills" variant="secondary" className="mt-10">
-          View all skills
-        </ButtonLink>
+        <div className="section-cta">
+          <ButtonLink href="/skills" variant="secondary">
+            View all skills
+          </ButtonLink>
+        </div>
       </SectionContainer>
 
       <SectionContainer
@@ -176,9 +192,14 @@ export default function Home() {
           —interests that keep me curious about systems, products and how people
           experience them.
         </p>
-        <ButtonLink href="/about" variant="ghost" className="mt-6">
-          More about me
-        </ButtonLink>
+        <div className="mt-8">
+          <InterestGallery items={interests.slice(0, 4)} compact />
+        </div>
+        <div className="section-cta">
+          <ButtonLink href="/about" variant="secondary">
+            More about me
+          </ButtonLink>
+        </div>
       </SectionContainer>
 
       <SectionContainer id="contact-destination" className="py-20 sm:py-24">

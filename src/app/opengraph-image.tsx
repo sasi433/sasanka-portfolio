@@ -13,15 +13,15 @@ export default function OpenGraphImage() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        background: "#09090b",
-        color: "#f7f3f5",
+        background: "#08090b",
+        color: "#f4efe7",
         padding: "76px",
         fontFamily: "sans-serif",
       }}
     >
       <div
         style={{
-          color: "#e5a0b8",
+          color: "#dfc3a7",
           fontSize: 24,
           letterSpacing: "0.12em",
           textTransform: "uppercase",
@@ -40,7 +40,7 @@ export default function OpenGraphImage() {
         >
           Senior Software Engineer
         </div>
-        <div style={{ fontSize: 32, color: "#c2b8bd" }}>
+        <div style={{ fontSize: 32, color: "#bbb7b0" }}>
           Backend · Python · DevOps · Cloud-Native Systems
         </div>
       </div>
@@ -49,7 +49,7 @@ export default function OpenGraphImage() {
           height: 8,
           width: 210,
           borderRadius: 8,
-          background: "#8c274c",
+          background: "#7f1d38",
         }}
       />
     </div>,

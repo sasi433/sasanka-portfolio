@@ -55,13 +55,36 @@ export type LanguageItem = {
   proficiency: string;
 };
 
+export type SkillVisual =
+  | "programming"
+  | "backend"
+  | "delivery"
+  | "quality"
+  | "observability"
+  | "web"
+  | "ai";
+
 export type SkillGroup = {
   title: string;
   description?: string;
   skills: string[];
+  image: {
+    src: string;
+    alt: string;
+    position?: string;
+  };
+  tone: "burgundy" | "blue" | "green" | "slate" | "amber";
+  visual: SkillVisual;
 };
 
 export type Interest = {
   title: string;
   description: string;
+  image: {
+    src: string;
+    alt: string;
+    position?: string;
+  };
+  placement?: "bottom-left" | "bottom-right" | "top-left" | "top-right";
+  tone?: "burgundy" | "blue" | "green" | "slate" | "amber";
 };

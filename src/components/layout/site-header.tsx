@@ -11,7 +11,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--header-background)] backdrop-blur-xl">
-      <div className="mx-auto flex min-h-18 w-full max-w-7xl items-center justify-between gap-6 px-5 sm:px-8 lg:px-12">
+      <div className="mx-auto flex min-h-18 w-full max-w-[96rem] items-center justify-between gap-6 px-5 sm:px-8 lg:px-12">
         <Link
           href="/"
           aria-label="Sasanka Maddala home"

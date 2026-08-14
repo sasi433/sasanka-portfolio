@@ -1,13 +1,28 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Boxes, Braces, Code2, Workflow } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { WorkItem } from "@/content/types";
 import { workStatusLabels } from "@/content/work";
 
 export function WorkCard({ item }: { item: WorkItem }) {
+  const VisualIcon = item.githubUrl
+    ? Code2
+    : item.slug.includes("container")
+      ? Boxes
+      : item.type === "engineering-case-study"
+        ? Workflow
+        : Braces;
+
   return (
-    <Card className="flex h-full flex-col">
+    <Card className="work-card flex h-full flex-col" data-work-kind={item.type}>
+      <div className="work-card__visual" aria-hidden="true">
+        <span className="work-card__ring" />
+        <span className="work-card__icon">
+          <VisualIcon className="size-7" />
+        </span>
+        <span className="work-card__signal" />
+      </div>
       <div className="flex flex-wrap gap-2">
         <Badge>
           {item.type === "application" ? "Application" : "Case study"}

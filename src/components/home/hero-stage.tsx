@@ -8,15 +8,24 @@ import { ButtonLink } from "@/components/ui/button";
 import { ExternalLink } from "@/components/ui/external-link";
 import { profile } from "@/content/profile";
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
 
 type NavigatorWithConnection = Navigator & {
   connection?: { saveData?: boolean };
 };
 
 export function HeroStage() {
+  const { resolvedTheme } = useTheme();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoEnabled, setVideoEnabled] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const mediaTheme = mounted && resolvedTheme === "light" ? "light" : "dark";
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   useEffect(() => {
     const reducedMotion = window.matchMedia(
@@ -34,7 +43,7 @@ export function HeroStage() {
   useEffect(() => {
     if (!videoEnabled || !videoRef.current) return;
     void videoRef.current.play().catch(() => setPaused(true));
-  }, [videoEnabled]);
+  }, [mediaTheme, videoEnabled]);
 
   function togglePlayback() {
     const video = videoRef.current;
@@ -56,25 +65,34 @@ export function HeroStage() {
       aria-labelledby="hero-heading"
     >
       <div
-        className="hero-stage__poster"
+        className="hero-stage__poster hero-stage__poster--dark"
         aria-hidden="true"
-        style={{
-          backgroundImage: "url('/media/hero-engineering-poster.jpg')",
-        }}
+      />
+      <div
+        className="hero-stage__poster hero-stage__poster--light"
+        aria-hidden="true"
       />
       {videoEnabled ? (
         <video
+          key={mediaTheme}
           ref={videoRef}
           className="hero-stage__video"
+          data-media-theme={mediaTheme}
           aria-hidden="true"
           muted
           loop
           playsInline
           preload="metadata"
-          poster="/media/hero-engineering-poster.jpg"
+          poster={`/media/hero-engineering-${mediaTheme}-poster.jpg`}
         >
-          <source src="/media/hero-engineering.webm" type="video/webm" />
-          <source src="/media/hero-engineering.mp4" type="video/mp4" />
+          <source
+            src={`/media/hero-engineering-${mediaTheme}.webm`}
+            type="video/webm"
+          />
+          <source
+            src={`/media/hero-engineering-${mediaTheme}.mp4`}
+            type="video/mp4"
+          />
         </video>
       ) : null}
       <div className="hero-stage__scrim" aria-hidden="true" />
@@ -104,14 +122,14 @@ export function HeroStage() {
             <ExternalLink
               aria-label="Sasanka Maddala on GitHub"
               href={profile.githubUrl}
-              className="text-[#d4cbd0] hover:text-white"
+              className="hero-stage__external-link"
             >
               <Code2 aria-hidden="true" className="size-4" /> GitHub
             </ExternalLink>
             <ExternalLink
               aria-label="Sasanka Maddala on LinkedIn"
               href={profile.linkedInUrl}
-              className="text-[#d4cbd0] hover:text-white"
+              className="hero-stage__external-link"
             >
               <Network aria-hidden="true" className="size-4" /> LinkedIn
             </ExternalLink>
@@ -155,7 +173,9 @@ export function HeroStage() {
           ) : (
             <Pause aria-hidden="true" className="size-4" />
           )}
-          <span>{paused ? "Play motion" : "Pause motion"}</span>
+          <span className="sr-only">
+            {paused ? "Play motion" : "Pause motion"}
+          </span>
         </button>
       ) : null}
     </section>

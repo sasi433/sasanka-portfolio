@@ -5,6 +5,12 @@ export const skillGroups = [
     title: "Programming Languages",
     description: "Languages used across systems, backend and automation work.",
     skills: ["Python", "C", "C++", "Bash / Shell", "Lua"],
+    image: {
+      src: "/images/skills/programming-languages-v2.webp",
+      alt: "Abstract modular structures representing programming and systems logic",
+    },
+    tone: "blue",
+    visual: "programming",
   },
   {
     title: "Backend Engineering",
@@ -20,6 +26,12 @@ export const skillGroups = [
       "Automated testing",
       "SQL / relational databases",
     ],
+    image: {
+      src: "/images/skills/backend-engineering-v2.webp",
+      alt: "Abstract service architecture connecting APIs, validation and data systems",
+    },
+    tone: "green",
+    visual: "backend",
   },
   {
     title: "DevOps and Cloud-Native Delivery",
@@ -35,6 +47,12 @@ export const skillGroups = [
       "CI/CD",
       "GitOps concepts",
     ],
+    image: {
+      src: "/images/skills/cloud-native-delivery-v2.webp",
+      alt: "Abstract delivery pipeline moving container modules toward cloud infrastructure",
+    },
+    tone: "blue",
+    visual: "delivery",
   },
   {
     title: "Build, Security and Quality",
@@ -49,6 +67,12 @@ export const skillGroups = [
       "Secure development awareness",
       "Code-quality workflows",
     ],
+    image: {
+      src: "/images/skills/build-security-quality-v2.webp",
+      alt: "Abstract build artifacts passing through security and quality validation",
+    },
+    tone: "amber",
+    visual: "quality",
   },
   {
     title: "Linux, Operations and Observability",
@@ -64,6 +88,12 @@ export const skillGroups = [
       "Production-support triage",
       "Failure investigation",
     ],
+    image: {
+      src: "/images/skills/operations-observability-v2.webp",
+      alt: "Abstract observability environment with system signals and diagnostic traces",
+    },
+    tone: "green",
+    visual: "observability",
   },
   {
     title: "Modern Web Portfolio Stack",
@@ -76,6 +106,12 @@ export const skillGroups = [
       "Tailwind CSS",
       "Cloudflare Workers",
     ],
+    image: {
+      src: "/images/skills/modern-web-stack-v2.webp",
+      alt: "Abstract responsive web layers connected through a global edge network",
+    },
+    tone: "slate",
+    visual: "web",
   },
   {
     title: "AI-Assisted Engineering",
@@ -91,5 +127,11 @@ export const skillGroups = [
       "AI-assisted testing",
       "AI-assisted review",
     ],
+    image: {
+      src: "/images/skills/ai-assisted-engineering-v2.webp",
+      alt: "Abstract AI-assisted engineering workflow with evaluation and verification paths",
+    },
+    tone: "burgundy",
+    visual: "ai",
   },
 ] satisfies readonly SkillGroup[];

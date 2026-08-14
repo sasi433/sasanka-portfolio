@@ -1,7 +1,10 @@
 import { GraduationCap, Languages, Route } from "lucide-react";
 import { PageIntro } from "@/components/content/page-intro";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import {
+  MediaScrollStory,
+  type MediaStoryItem,
+} from "@/components/content/media-scroll-story";
 import { SectionContainer } from "@/components/ui/section-container";
 import { educationItems, languageItems } from "@/content/education";
 import { interests } from "@/content/interests";
@@ -14,6 +17,15 @@ export const metadata = createPageMetadata(
 );
 
 export default function AboutPage() {
+  const interestScenes = interests.map((interest, index) => ({
+    kicker: `Beyond code ${String(index + 1).padStart(2, "0")}`,
+    title: interest.title,
+    description: interest.description,
+    image: interest.image,
+    placement: interest.placement,
+    tone: interest.tone,
+  })) satisfies readonly MediaStoryItem[];
+
   return (
     <div className="page-shell">
       <PageIntro
@@ -115,7 +127,26 @@ export default function AboutPage() {
         </div>
       </SectionContainer>
 
-      <SectionContainer id="languages" className="pb-20 sm:pb-24">
+      <SectionContainer id="beyond-code-heading" className="pb-8 sm:pb-10">
+        <p className="font-mono text-xs tracking-[0.14em] text-[var(--accent-emphasis)] uppercase">
+          Beyond code
+        </p>
+        <h2 className="mt-3 max-w-3xl text-3xl font-semibold tracking-[-0.03em] sm:text-4xl">
+          Curiosity has more than one interface.
+        </h2>
+        <p className="mt-4 max-w-2xl leading-7 text-[var(--text-secondary)]">
+          Technology, stories, engineering, food and new places all offer a
+          different way to notice how things are designed and experienced.
+        </p>
+      </SectionContainer>
+
+      <MediaScrollStory
+        id="beyond-code"
+        label="Interests beyond code"
+        items={interestScenes}
+      />
+
+      <SectionContainer id="languages" className="py-20 sm:py-24">
         <div className="flex items-center gap-3">
           <Languages
             aria-hidden="true"
@@ -134,20 +165,6 @@ export default function AboutPage() {
                 {item.proficiency}
               </p>
             </div>
-          ))}
-        </div>
-      </SectionContainer>
-
-      <SectionContainer id="beyond-code" className="pb-20 sm:pb-24">
-        <h2 className="text-2xl font-semibold">Beyond code</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {interests.map((interest) => (
-            <Card key={interest.title}>
-              <h3 className="font-semibold">{interest.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">
-                {interest.description}
-              </p>
-            </Card>
           ))}
         </div>
       </SectionContainer>

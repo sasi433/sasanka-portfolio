@@ -4,174 +4,222 @@ import sharp from "sharp";
 
 const width = 1280;
 const height = 720;
-const frameRate = 20;
-const duration = 12;
+const frameRate = 16;
+const duration = 10;
 const frameCount = frameRate * duration;
-const frameDirectory = path.resolve(".tools/hero-video-frames");
-const posterPath = path.resolve("public/media/hero-engineering-poster.jpg");
+const mediaDirectory = path.resolve("public/media");
+
+const themes = {
+  dark: {
+    background: "#08090b",
+    panel: "#12151a",
+    panelRaised: "#191d23",
+    text: "#f4efe7",
+    muted: "#9fa5aa",
+    border: "#3a3f46",
+    burgundy: "#7f1d38",
+    burgundyBright: "#a33852",
+    blue: "#4f91bb",
+    green: "#4e9d79",
+    amber: "#c08a46",
+    grid: "#30353c",
+    scrim: "#08090b",
+  },
+  light: {
+    background: "#f6f1e8",
+    panel: "#fffaf2",
+    panelRaised: "#ece5da",
+    text: "#202329",
+    muted: "#646a70",
+    border: "#c9c1b7",
+    burgundy: "#741a34",
+    burgundyBright: "#8c2943",
+    blue: "#276c98",
+    green: "#297458",
+    amber: "#936126",
+    grid: "#d8d0c5",
+    scrim: "#f6f1e8",
+  },
+};
 
 const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 const smooth = (value) => {
   const x = clamp(value);
   return x * x * (3 - 2 * x);
 };
-const phase = (time, start, end, fade = 0.08) =>
+const phase = (time, start, end, fade = 0.055) =>
   smooth((time - start) / fade) * smooth((end - time) / fade);
 const opacity = (value) => clamp(value).toFixed(3);
 
-function waveform(time) {
-  const points = Array.from({ length: 80 }, (_, index) => {
-    const x = 80 + index * 15;
-    const envelope = Math.sin((index / 79) * Math.PI);
-    const y =
-      360 +
-      Math.sin(index * 0.46 + time * Math.PI * 8) * 54 * envelope +
-      Math.sin(index * 0.13 - time * Math.PI * 4) * 18;
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  });
-  return points.join(" ");
+function codeStage(palette, strength, time) {
+  const cursor = 145 + Math.round(smooth(time / 0.18) * 118);
+  return `<g opacity="${opacity(strength)}">
+    <rect x="548" y="92" width="656" height="536" rx="24" fill="${palette.panel}" stroke="${palette.border}" stroke-width="2"/>
+    <rect x="548" y="92" width="656" height="64" rx="24" fill="${palette.panelRaised}"/>
+    <circle cx="582" cy="124" r="6" fill="${palette.burgundy}"/><circle cx="604" cy="124" r="6" fill="${palette.amber}"/><circle cx="626" cy="124" r="6" fill="${palette.green}"/>
+    <text x="672" y="131" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="16" letter-spacing="2">SERVICE.PY · IMPLEMENT</text>
+    <rect x="578" y="182" width="112" height="410" rx="15" fill="${palette.panelRaised}" opacity=".72"/>
+    <text x="602" y="222" fill="${palette.blue}" font-family="ui-monospace, monospace" font-size="13">API</text>
+    <text x="602" y="258" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="13">tests</text>
+    <text x="602" y="294" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="13">deploy</text>
+    <text x="730" y="214" fill="${palette.burgundyBright}" font-family="ui-monospace, monospace" font-size="18">def</text>
+    <text x="774" y="214" fill="${palette.text}" font-family="ui-monospace, monospace" font-size="18">process_event(event):</text>
+    <text x="754" y="263" fill="${palette.blue}" font-family="ui-monospace, monospace" font-size="18">validate(event)</text>
+    <text x="754" y="312" fill="${palette.text}" font-family="ui-monospace, monospace" font-size="18">result = transform(event)</text>
+    <text x="754" y="361" fill="${palette.green}" font-family="ui-monospace, monospace" font-size="18">return publish(result)</text>
+    <rect x="735" y="${cursor}" width="3" height="25" fill="${palette.burgundyBright}" opacity=".9"/>
+    <path d="M742 432 H1125" stroke="${palette.border}"/>
+    <text x="742" y="475" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="14">clear boundaries · validated input · useful errors</text>
+  </g>`;
 }
 
-function dataBlocks(time, strength) {
-  return Array.from({ length: 18 }, (_, index) => {
-    const column = index % 6;
-    const row = Math.floor(index / 6);
-    const drift = Math.sin(time * Math.PI * 2 + index) * 8;
-    const x = 170 + column * 150 + drift;
-    const y = 220 + row * 90 + Math.cos(time * Math.PI * 2 + index) * 5;
-    const delay = smooth((strength - index * 0.018) * 2.4);
-    return `<rect x="${x}" y="${y}" width="${70 + (index % 3) * 18}" height="10" rx="5" fill="#e5a0b8" opacity="${opacity(delay * 0.45)}" />`;
-  }).join("");
+function failureStage(palette, strength, progress) {
+  const reveal = smooth(progress);
+  return `<g opacity="${opacity(strength)}">
+    <rect x="548" y="92" width="656" height="536" rx="24" fill="${palette.panel}" stroke="${palette.border}" stroke-width="2"/>
+    <text x="590" y="140" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="15" letter-spacing="2">TEST SUITE · VERIFY</text>
+    <rect x="590" y="180" width="572" height="84" rx="16" fill="${palette.panelRaised}" stroke="${palette.green}" stroke-opacity=".55"/>
+    <circle cx="628" cy="222" r="12" fill="${palette.green}"/><path d="M621 222 l5 5 10-12" fill="none" stroke="${palette.background}" stroke-width="3"/>
+    <text x="662" y="228" fill="${palette.text}" font-family="ui-monospace, monospace" font-size="17">validation accepts complete events</text>
+    <rect x="590" y="284" width="572" height="158" rx="16" fill="${palette.panelRaised}" stroke="${palette.burgundyBright}" stroke-width="2"/>
+    <circle cx="628" cy="326" r="12" fill="${palette.burgundy}"/><path d="M622 320 l12 12 M634 320 l-12 12" stroke="${palette.text}" stroke-width="3"/>
+    <text x="662" y="332" fill="${palette.text}" font-family="ui-monospace, monospace" font-size="17">request trace remains connected</text>
+    <text x="622" y="390" fill="${palette.burgundyBright}" font-family="ui-monospace, monospace" font-size="15" opacity="${opacity(reveal)}">FAILED · request_id missing after transform</text>
+    <rect x="590" y="476" width="572" height="96" rx="16" fill="${palette.panelRaised}"/>
+    <path d="M624 524 H1120" stroke="${palette.burgundy}" stroke-width="4" stroke-dasharray="${(reveal * 496).toFixed(1)} 496"/>
+    <text x="624" y="548" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="13">failure isolated before release</text>
+  </g>`;
 }
 
-const nodes = [
-  [228, 238],
-  [432, 196],
-  [620, 302],
-  [830, 208],
-  [1000, 338],
-  [770, 492],
-  [488, 510],
-  [272, 430],
-];
-
-const links = [
-  [0, 1],
-  [0, 7],
-  [1, 2],
-  [1, 3],
-  [2, 3],
-  [2, 6],
-  [3, 4],
-  [3, 5],
-  [4, 5],
-  [5, 6],
-  [6, 7],
-];
-
-function network(time, strength) {
-  const lines = links
-    .map(([from, to], index) => {
-      const [x1, y1] = nodes[from];
-      const [x2, y2] = nodes[to];
-      const travelled = smooth((strength - index * 0.025) * 2.2);
-      return `<path d="M${x1} ${y1} L${x2} ${y2}" pathLength="1" stroke="#8c274c" stroke-width="2" stroke-dasharray="1" stroke-dashoffset="${(1 - travelled).toFixed(3)}" opacity="${opacity(0.65 * strength)}" />`;
-    })
-    .join("");
-  const circles = nodes
-    .map(([x, y], index) => {
-      const pulse = 0.72 + Math.sin(time * Math.PI * 4 + index) * 0.18;
-      return `<g opacity="${opacity(strength)}"><circle cx="${x}" cy="${y}" r="${18 + pulse * 4}" fill="#2c1620" stroke="#e5a0b8" stroke-width="2"/><circle cx="${x}" cy="${y}" r="4" fill="#f7f3f5" opacity="${opacity(pulse)}"/></g>`;
-    })
-    .join("");
-  return lines + circles;
+function diagnoseStage(palette, strength, progress) {
+  const fixed = smooth((progress - 0.45) / 0.45);
+  const status = fixed > 0.5 ? "PATCH VERIFIED" : "TRACE CORRELATED";
+  const statusColor = fixed > 0.5 ? palette.green : palette.blue;
+  return `<g opacity="${opacity(strength)}">
+    <rect x="548" y="92" width="656" height="536" rx="24" fill="${palette.panel}" stroke="${palette.border}" stroke-width="2"/>
+    <text x="590" y="140" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="15" letter-spacing="2">EVIDENCE · DIAGNOSE · CORRECT</text>
+    <rect x="590" y="180" width="572" height="110" rx="16" fill="${palette.panelRaised}"/>
+    <text x="622" y="220" fill="${palette.blue}" font-family="ui-monospace, monospace" font-size="14">TRACE 8F2A</text>
+    <path d="M622 252 H760 L796 220 H928 L968 252 H1124" fill="none" stroke="${palette.blue}" stroke-width="3"/>
+    <circle cx="796" cy="220" r="9" fill="${palette.burgundy}"/>
+    <rect x="590" y="316" width="572" height="150" rx="16" fill="${palette.panelRaised}" stroke="${statusColor}" stroke-opacity=".65"/>
+    <text x="622" y="354" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="14">transform.py · line 42</text>
+    <rect x="614" y="377" width="516" height="42" rx="8" fill="${palette.burgundy}" opacity="${opacity(0.18 * (1 - fixed))}"/>
+    <text x="630" y="404" fill="${palette.text}" font-family="ui-monospace, monospace" font-size="16">result.request_id = event.request_id</text>
+    <text x="590" y="534" fill="${statusColor}" font-family="ui-monospace, monospace" font-size="16" font-weight="700" letter-spacing="2">${status}</text>
+    <path d="M996 524 l14 14 32-38" fill="none" stroke="${palette.green}" stroke-width="6" opacity="${opacity(fixed)}"/>
+  </g>`;
 }
 
-function pipeline(time, strength) {
-  const stages = [250, 430, 610, 790, 970];
-  const connectors = stages
-    .slice(0, -1)
-    .map(
-      (x, index) =>
-        `<path d="M${x + 78} 360 H${stages[index + 1] - 18}" stroke="#e5a0b8" stroke-width="3" stroke-dasharray="8 12" stroke-dashoffset="${(-time * 120).toFixed(1)}" opacity="${opacity(strength * 0.55)}"/>`,
-    )
-    .join("");
-  const boxes = stages
-    .map((x, index) => {
-      const checked = smooth((strength - index * 0.08) * 2);
-      return `<g opacity="${opacity(strength)}"><rect x="${x - 42}" y="318" width="84" height="84" rx="18" fill="#141216" stroke="#6b3a4d" stroke-width="2"/><path d="M${x - 14} 359 l12 12 24 -28" fill="none" stroke="#e5a0b8" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" opacity="${opacity(checked)}"/></g>`;
-    })
-    .join("");
-  return connectors + boxes;
+function pipelineStage(palette, strength, progress) {
+  const stages = ["TEST", "BUILD", "SCAN", "DEPLOY"];
+  return `<g opacity="${opacity(strength)}">
+    <rect x="548" y="92" width="656" height="536" rx="24" fill="${palette.panel}" stroke="${palette.border}" stroke-width="2"/>
+    <text x="590" y="140" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="15" letter-spacing="2">DELIVERY PIPELINE</text>
+    ${stages
+      .map((label, index) => {
+        const x = 610 + index * 145;
+        const complete = smooth((progress - index * 0.18) / 0.22);
+        return `<g>
+          ${index < stages.length - 1 ? `<path d="M${x + 88} 332 H${x + 132}" stroke="${palette.border}" stroke-width="3"/><path d="M${x + 88} 332 H${x + 132}" stroke="${palette.green}" stroke-width="3" stroke-dasharray="${(complete * 44).toFixed(1)} 44"/>` : ""}
+          <rect x="${x}" y="270" width="92" height="124" rx="18" fill="${palette.panelRaised}" stroke="${complete > 0.75 ? palette.green : palette.border}" stroke-width="2"/>
+          <circle cx="${x + 46}" cy="316" r="17" fill="${palette.green}" opacity="${opacity(complete)}"/>
+          <path d="M${x + 37} 316 l7 7 14-17" fill="none" stroke="${palette.background}" stroke-width="4" opacity="${opacity(complete)}"/>
+          <text x="${x + 46}" y="365" text-anchor="middle" fill="${palette.text}" font-family="ui-monospace, monospace" font-size="13">${label}</text>
+        </g>`;
+      })
+      .join("")}
+    <rect x="590" y="470" width="572" height="84" rx="14" fill="${palette.panelRaised}"/>
+    <text x="622" y="520" fill="${palette.green}" font-family="ui-monospace, monospace" font-size="16" opacity="${opacity(smooth((progress - 0.65) / 0.25))}">release checks complete · artifact promoted</text>
+  </g>`;
 }
 
-function infrastructure(time, strength, recovery) {
-  const boxes = [
-    [335, 315],
-    [455, 315],
-    [335, 435],
-    [455, 435],
-  ]
-    .map(
-      ([x, y], index) =>
-        `<g opacity="${opacity(strength)}"><rect x="${x}" y="${y}" width="88" height="74" rx="13" fill="#141216" stroke="#e5a0b8" stroke-width="2"/><rect x="${x + 16}" y="${y + 17}" width="42" height="6" rx="3" fill="#e5a0b8" opacity=".55"/><circle cx="${x + 68}" cy="${y + 20}" r="5" fill="${index === 2 && recovery < 0.46 ? "#d36a78" : "#9fd0bc"}"/></g>`,
-    )
-    .join("");
-  const cloud = `<g opacity="${opacity(strength)}" transform="translate(705 300)"><path d="M65 150h235c48 0 70-65 30-92-8-38-42-65-82-60-22-37-77-40-105-7-36-11-75 12-81 50-60 4-59 109 3 109Z" fill="#141216" stroke="#e5a0b8" stroke-width="3"/><path d="M125 78h145M125 105h104" stroke="#e5a0b8" stroke-linecap="round" stroke-width="8" opacity=".42"/></g>`;
-  const ring = `<circle cx="630" cy="380" r="120" fill="none" stroke="${recovery > 0.5 ? "#9fd0bc" : "#d36a78"}" stroke-width="4" stroke-dasharray="${(recovery * 754).toFixed(1)} 754" transform="rotate(-90 630 380)" opacity="${opacity(strength * 0.5)}"/>`;
-  return boxes + cloud + ring;
+function healthyStage(palette, strength, time) {
+  const pulse = 0.7 + Math.sin(time * Math.PI * 8) * 0.14;
+  return `<g opacity="${opacity(strength)}">
+    <rect x="548" y="92" width="656" height="536" rx="24" fill="${palette.panel}" stroke="${palette.border}" stroke-width="2"/>
+    <text x="590" y="140" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="15" letter-spacing="2">RUNTIME · OBSERVE</text>
+    <rect x="590" y="180" width="572" height="120" rx="18" fill="${palette.panelRaised}"/>
+    <circle cx="640" cy="240" r="22" fill="${palette.green}" opacity="${opacity(pulse)}"/><path d="M628 240 l9 9 19-23" fill="none" stroke="${palette.background}" stroke-width="5"/>
+    <text x="688" y="232" fill="${palette.text}" font-family="ui-monospace, monospace" font-size="24" font-weight="700">HEALTHY</text>
+    <text x="688" y="260" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="14">services responding · signals normal</text>
+    ${[0, 1, 2]
+      .map((index) => {
+        const x = 610 + index * 180;
+        const values = ["API", "WORKER", "DATA"];
+        return `<g><rect x="${x}" y="350" width="142" height="120" rx="18" fill="${palette.panelRaised}" stroke="${palette.green}" stroke-opacity=".6"/><circle cx="${x + 28}" cy="380" r="6" fill="${palette.green}"/><text x="${x + 48}" y="386" fill="${palette.text}" font-family="ui-monospace, monospace" font-size="14">${values[index]}</text><path d="M${x + 24} 430 C${x + 52} ${420 - index * 8},${x + 88} ${445 + index * 6},${x + 118} 414" fill="none" stroke="${index === 1 ? palette.blue : palette.green}" stroke-width="3"/></g>`;
+      })
+      .join("")}
+    <text x="590" y="548" fill="${palette.burgundyBright}" font-family="ui-monospace, monospace" font-size="14">IMPLEMENT → VERIFY → DIAGNOSE → DELIVER → OBSERVE</text>
+  </g>`;
 }
 
-function frameSvg(frame) {
-  const t = frame / frameCount;
-  const wave = phase(t, 0.01, 0.26);
-  const blocks = phase(t, 0.16, 0.42);
-  const services = phase(t, 0.32, 0.62);
-  const delivery = phase(t, 0.52, 0.78);
-  const infra = phase(t, 0.69, 0.98);
-  const recovery = smooth((t - 0.82) / 0.12);
-  const ambientPulse = 0.72 + Math.sin(t * Math.PI * 2) * 0.08;
+function frameSvg(frame, palette) {
+  const time = frame / frameCount;
+  const code = phase(time, 0, 0.23);
+  const failure = phase(time, 0.18, 0.43);
+  const diagnose = phase(time, 0.38, 0.64);
+  const pipeline = phase(time, 0.59, 0.83);
+  const healthy = phase(time, 0.78, 1, 0.05);
+  const activeLabel =
+    time < 0.2
+      ? "IMPLEMENT"
+      : time < 0.4
+        ? "VERIFY"
+        : time < 0.61
+          ? "DIAGNOSE"
+          : time < 0.8
+            ? "DELIVER"
+            : "OBSERVE";
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
     <defs>
-      <radialGradient id="glow" cx="68%" cy="45%" r="70%"><stop offset="0" stop-color="#4b2031" stop-opacity="${ambientPulse}"/><stop offset=".48" stop-color="#1c1017" stop-opacity=".68"/><stop offset="1" stop-color="#07070a" stop-opacity="1"/></radialGradient>
-      <linearGradient id="shade" x1="0" x2="1"><stop offset="0" stop-color="#07070a" stop-opacity=".9"/><stop offset=".58" stop-color="#07070a" stop-opacity=".18"/><stop offset="1" stop-color="#07070a" stop-opacity=".42"/></linearGradient>
-      <filter id="blur"><feGaussianBlur stdDeviation="20"/></filter>
+      <radialGradient id="ambient" cx="82%" cy="42%" r="78%"><stop offset="0" stop-color="${palette.burgundy}" stop-opacity=".27"/><stop offset=".46" stop-color="${palette.blue}" stop-opacity=".09"/><stop offset="1" stop-color="${palette.background}" stop-opacity="0"/></radialGradient>
     </defs>
-    <rect width="1280" height="720" fill="#07070a"/>
-    <rect width="1280" height="720" fill="url(#glow)"/>
-    <g opacity=".13" stroke="#9c6077" stroke-width="1">${Array.from({ length: 12 }, (_, i) => `<path d="M0 ${i * 65 + ((t * 24) % 65)} H1280"/>`).join("")}${Array.from({ length: 20 }, (_, i) => `<path d="M${i * 70 + ((t * 18) % 70)} 0 V720"/>`).join("")}</g>
-    <circle cx="930" cy="310" r="250" fill="#8c274c" opacity=".09" filter="url(#blur)"/>
-    <polyline points="${waveform(t)}" fill="none" stroke="#e5a0b8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="${opacity(wave * 0.72)}"/>
-    <g>${dataBlocks(t, blocks)}</g>
-    <g>${network(t, services)}</g>
-    <g>${pipeline(t, delivery)}</g>
-    <g>${infrastructure(t, infra, recovery)}</g>
-    <rect width="1280" height="720" fill="url(#shade)"/>
-    <rect x="0" y="0" width="1280" height="720" fill="none" stroke="#9b4668" stroke-opacity=".14" stroke-width="2"/>
+    <rect width="1280" height="720" fill="${palette.background}"/>
+    <rect width="1280" height="720" fill="url(#ambient)"/>
+    <g opacity=".3" stroke="${palette.grid}" stroke-width="1">${Array.from({ length: 12 }, (_, index) => `<path d="M0 ${index * 64 + 8} H1280"/>`).join("")}${Array.from({ length: 19 }, (_, index) => `<path d="M${index * 72 + 8} 0 V720"/>`).join("")}</g>
+    <text x="86" y="578" fill="${palette.muted}" font-family="ui-monospace, monospace" font-size="13" letter-spacing="3">ENGINEERING LOOP</text>
+    <text x="86" y="616" fill="${palette.burgundyBright}" font-family="ui-monospace, monospace" font-size="20" font-weight="700" letter-spacing="3">${activeLabel}</text>
+    <g transform="translate(-100 54) scale(.82)">
+      ${codeStage(palette, code, time)}
+      ${failureStage(palette, failure, (time - 0.18) / 0.25)}
+      ${diagnoseStage(palette, diagnose, (time - 0.38) / 0.26)}
+      ${pipelineStage(palette, pipeline, (time - 0.59) / 0.24)}
+      ${healthyStage(palette, healthy, time)}
+    </g>
+    <rect width="1280" height="720" fill="${palette.scrim}" opacity=".18"/>
   </svg>`;
 }
 
-await rm(frameDirectory, { recursive: true, force: true });
-await mkdir(frameDirectory, { recursive: true });
-await mkdir(path.dirname(posterPath), { recursive: true });
+await mkdir(mediaDirectory, { recursive: true });
 
-for (let frame = 0; frame < frameCount; frame += 1) {
-  const output = path.join(
-    frameDirectory,
-    `frame-${String(frame + 1).padStart(4, "0")}.png`,
+for (const [theme, palette] of Object.entries(themes)) {
+  const frameDirectory = path.resolve(`.tools/hero-video-frames-${theme}`);
+  const posterPath = path.join(
+    mediaDirectory,
+    `hero-engineering-${theme}-poster.jpg`,
   );
-  await sharp(Buffer.from(frameSvg(frame)))
-    .png({ compressionLevel: 8 })
-    .toFile(output);
-  if (frame === Math.round(frameCount * 0.58)) {
-    await sharp(Buffer.from(frameSvg(frame)))
-      .jpeg({ quality: 82, progressive: true })
-      .toFile(posterPath);
-  }
-}
+  await rm(frameDirectory, { recursive: true, force: true });
+  await mkdir(frameDirectory, { recursive: true });
 
-console.log(
-  `Rendered ${frameCount} frames at ${frameRate} fps to ${frameDirectory}`,
-);
-console.log(`Rendered poster to ${posterPath}`);
+  for (let frame = 0; frame < frameCount; frame += 1) {
+    const output = path.join(
+      frameDirectory,
+      `frame-${String(frame + 1).padStart(4, "0")}.png`,
+    );
+    await sharp(Buffer.from(frameSvg(frame, palette)))
+      .png({ compressionLevel: 8 })
+      .toFile(output);
+    if (frame === Math.round(frameCount * 0.86)) {
+      await sharp(Buffer.from(frameSvg(frame, palette)))
+        .jpeg({ quality: 84, progressive: true })
+        .toFile(posterPath);
+    }
+  }
+
+  console.log(
+    `Rendered ${frameCount} ${theme} frames at ${frameRate} fps to ${frameDirectory}`,
+  );
+  console.log(`Rendered ${theme} poster to ${posterPath}`);
+}

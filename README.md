@@ -28,25 +28,25 @@ OpenNext does not fully support native Windows symlink behavior. On Windows with
 
 ## Commands
 
-| Command                  | Purpose                                                    |
-| ------------------------ | ---------------------------------------------------------- |
-| `pnpm dev`               | Start the Next.js development server                       |
-| `pnpm start`             | Serve an existing production build                         |
-| `pnpm build`             | Create a production Next.js build                          |
-| `pnpm build:cloudflare`  | Build the Cloudflare Worker with OpenNext                  |
-| `pnpm preview`           | Build and preview through OpenNext/Wrangler                |
-| `pnpm preview:docker`    | Run the OpenNext preview in Node 24 Linux on Windows       |
-| `pnpm deploy`            | Build and deploy immediately to Cloudflare                 |
-| `pnpm upload`            | Build and upload a version without promoting it            |
-| `pnpm deploy:dry-run`    | Validate the generated Wrangler upload bundle              |
-| `pnpm lint`              | Run ESLint                                                 |
-| `pnpm typecheck`         | Run TypeScript without emitting files                      |
-| `pnpm test`              | Run unit, component and server tests                       |
-| `pnpm test:e2e`          | Run Playwright browser and accessibility tests             |
-| `pnpm audit:lighthouse`  | Audit the local production homepage                        |
-| `pnpm media:hero:frames` | Regenerate the source frames and poster for the hero media |
-| `pnpm format`            | Format files with Prettier                                 |
-| `pnpm format:check`      | Verify formatting without writing                          |
+| Command                  | Purpose                                                                |
+| ------------------------ | ---------------------------------------------------------------------- |
+| `pnpm dev`               | Start the Next.js development server                                   |
+| `pnpm start`             | Serve an existing production build                                     |
+| `pnpm build`             | Create a production Next.js build                                      |
+| `pnpm build:cloudflare`  | Build the Cloudflare Worker with OpenNext                              |
+| `pnpm preview`           | Build and preview through OpenNext/Wrangler                            |
+| `pnpm preview:docker`    | Run the OpenNext preview in Node 24 Linux on Windows                   |
+| `pnpm deploy`            | Build and deploy immediately to Cloudflare                             |
+| `pnpm upload`            | Build and upload a version without promoting it                        |
+| `pnpm deploy:dry-run`    | Validate the generated Wrangler upload bundle                          |
+| `pnpm lint`              | Run ESLint                                                             |
+| `pnpm typecheck`         | Run TypeScript without emitting files                                  |
+| `pnpm test`              | Run unit, component and server tests                                   |
+| `pnpm test:e2e`          | Run Playwright browser and accessibility tests                         |
+| `pnpm audit:lighthouse`  | Audit the local production homepage                                    |
+| `pnpm media:hero:frames` | Regenerate the dark/light source frames and posters for the hero media |
+| `pnpm format`            | Format files with Prettier                                             |
+| `pnpm format:check`      | Verify formatting without writing                                      |
 
 ## Architecture
 

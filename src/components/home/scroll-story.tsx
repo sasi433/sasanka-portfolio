@@ -1,11 +1,19 @@
 "use client";
 
 import {
+  Activity,
   Boxes,
+  Braces,
   CloudCog,
   CodeXml,
+  Cpu,
+  Database,
+  Gauge,
+  GitBranch,
+  RadioTower,
   SearchCheck,
   ServerCog,
+  Smartphone,
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
@@ -16,6 +24,17 @@ export type StoryItem = {
   title: string;
   description: string;
   icon?: "backend" | "tooling" | "cloud" | "reliability" | "foundation";
+  visual?:
+    | "signal"
+    | "api"
+    | "network"
+    | "vehicle"
+    | "delivery"
+    | "services"
+    | "pipeline"
+    | "infrastructure"
+    | "diagnostics";
+  tone?: "burgundy" | "blue" | "green" | "slate" | "amber";
 };
 
 const icons: Record<NonNullable<StoryItem["icon"]>, LucideIcon> = {
@@ -24,6 +43,21 @@ const icons: Record<NonNullable<StoryItem["icon"]>, LucideIcon> = {
   cloud: CloudCog,
   reliability: SearchCheck,
   foundation: CodeXml,
+};
+
+const visualIcons: Record<
+  NonNullable<StoryItem["visual"]>,
+  readonly [LucideIcon, LucideIcon, LucideIcon]
+> = {
+  signal: [Activity, Cpu, Smartphone],
+  api: [Braces, ServerCog, Database],
+  network: [RadioTower, GitBranch, SearchCheck],
+  vehicle: [Gauge, Boxes, CloudCog],
+  delivery: [CodeXml, GitBranch, CloudCog],
+  services: [Braces, ServerCog, Database],
+  pipeline: [CodeXml, GitBranch, Boxes],
+  infrastructure: [Boxes, CloudCog, ServerCog],
+  diagnostics: [Activity, SearchCheck, Gauge],
 };
 
 export function ScrollStory({
@@ -82,6 +116,7 @@ export function ScrollStory({
       id={id}
       aria-labelledby={headingId}
       className={`scroll-story ${enhanced ? "is-enhanced" : ""}`}
+      data-active-tone={items[activeIndex]?.tone ?? "burgundy"}
       style={{ "--story-count": items.length } as CSSProperties}
     >
       <div className="scroll-story__stage">
@@ -105,29 +140,46 @@ export function ScrollStory({
               }}
             />
           </div>
-          {cta ? (
-            <ButtonLink href={cta.href} variant="secondary" className="mt-8">
-              {cta.label}
-            </ButtonLink>
-          ) : null}
         </div>
 
         <div className="scroll-story__scenes">
           {items.map((item, index) => {
             const Icon = item.icon ? icons[item.icon] : null;
+            const VisualIcons = item.visual
+              ? visualIcons[item.visual]
+              : visualIcons.services;
             const active = index === activeIndex;
             return (
               <article
                 key={`${item.kicker}-${item.title}`}
                 className={`scroll-story__scene ${active ? "is-active" : ""}`}
+                data-tone={item.tone ?? "burgundy"}
                 aria-hidden={enhanced ? !active : undefined}
               >
-                <div className="scroll-story__scene-topline">
-                  <p>{item.kicker}</p>
-                  {Icon ? <Icon aria-hidden="true" className="size-6" /> : null}
+                <div className="scroll-story__visual" aria-hidden="true">
+                  <span className="scroll-story__visual-orbit" />
+                  {VisualIcons.map((VisualIcon, visualIndex) => (
+                    <span
+                      className="scroll-story__visual-node"
+                      key={visualIndex}
+                    >
+                      <VisualIcon className="size-5" />
+                    </span>
+                  ))}
+                  <span className="scroll-story__visual-flow" />
                 </div>
-                <h3>{item.title}</h3>
-                <p className="scroll-story__description">{item.description}</p>
+                <div className="scroll-story__scene-content">
+                  <div className="scroll-story__scene-topline">
+                    <p>{item.kicker}</p>
+                    {Icon ? (
+                      <Icon aria-hidden="true" className="size-6" />
+                    ) : null}
+                  </div>
+                  <h3>{item.title}</h3>
+                  <p className="scroll-story__description">
+                    {item.description}
+                  </p>
+                </div>
               </article>
             );
           })}
@@ -145,6 +197,13 @@ export function ScrollStory({
           />
         ))}
       </div>
+      {cta ? (
+        <div className="scroll-story__cta">
+          <ButtonLink href={cta.href} variant="secondary">
+            {cta.label}
+          </ButtonLink>
+        </div>
+      ) : null}
     </section>
   );
 }
