@@ -47,8 +47,8 @@ This document records the local Phase 9 audit. A checked item means the reposito
 - [x] Review the One Planet Rating, education, thesis and language content added after the earlier owner review.
 - [x] Read every public page and approve the professional wording, project statuses, interests, photograph, and professional email for publication.
 - [x] Review the linked GitHub and LinkedIn profiles themselves. They may expose location or employment details that the portfolio intentionally omits.
-- [ ] Authenticate GitHub tooling and confirm the hosted `main` CI workflow passes.
-- [ ] Configure Cloudflare Workers Builds for the private repository and production branch.
+- [x] Authenticate GitHub tooling and confirm the hosted `main` CI workflow passes.
+- [x] Configure Cloudflare Workers Builds for the private repository and production branch.
 - [ ] Add the required public build variables and encrypted Turnstile/Resend secrets in Cloudflare; do not commit them.
 - [ ] Deploy to `workers.dev`, verify Worker logs, and test the production URL in dark/light themes and representative browsers/viewports.
 - [ ] Submit a real contact message, confirm Turnstile verification and rate limiting, and verify email delivery and reply-to behavior.

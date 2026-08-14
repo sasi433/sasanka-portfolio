@@ -6,7 +6,7 @@ The production target is Cloudflare Workers through the OpenNext Cloudflare adap
 
 In Cloudflare Workers & Pages, import the GitHub repository and use:
 
-- Worker name: `sasanka-portfolio` (must match `wrangler.jsonc`)
+- Worker name: `portfolio` (must match `wrangler.jsonc`)
 - Production branch: `main`
 - Build command: `pnpm exec opennextjs-cloudflare build`
 - Deploy command: `pnpm exec opennextjs-cloudflare deploy -- --keep-vars`
