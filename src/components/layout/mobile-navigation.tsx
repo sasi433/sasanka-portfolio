@@ -80,8 +80,8 @@ export function MobileNavigation() {
           >
             <NavigationLinks
               className="flex-col items-stretch gap-1"
-              linkClassName="w-full justify-between px-3 py-3 text-lg after:right-3 after:bottom-2 after:left-3"
               onNavigate={() => closeMenu({ restoreFocus: false })}
+              variant="mobile"
             />
             <div className="mt-auto border-t border-[var(--border)] pt-6">
               <ThemeToggle showLabel className="w-full justify-start" />

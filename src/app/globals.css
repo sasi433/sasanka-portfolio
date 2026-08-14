@@ -543,6 +543,77 @@ body {
   font-size: 1rem;
 }
 
+@media (max-width: 899px) {
+  .scroll-story.is-enhanced {
+    min-height: calc(var(--story-count) * 64svh + 100svh);
+    padding-block: 0;
+  }
+
+  .scroll-story.is-enhanced .scroll-story__stage {
+    position: sticky;
+    z-index: 1;
+    top: 4.5rem;
+    min-height: calc(100svh - 4.5rem);
+    align-content: center;
+    gap: 1.25rem;
+    padding-block: 1.25rem;
+  }
+
+  .scroll-story.is-enhanced .scroll-story__progress {
+    margin-top: 1rem;
+  }
+
+  .scroll-story.is-enhanced .scroll-story__scenes {
+    min-height: clamp(20rem, 46svh, 25rem);
+  }
+
+  .scroll-story.is-enhanced .scroll-story__scene {
+    position: absolute;
+    inset: 0;
+    grid-template-rows: minmax(7rem, 0.72fr) auto;
+    min-height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(1.25rem) scale(0.985);
+    visibility: hidden;
+    transition:
+      opacity 360ms ease,
+      transform 480ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 360ms ease,
+      visibility 0s linear 480ms;
+  }
+
+  .scroll-story.is-enhanced .scroll-story__scene.is-active {
+    border-color: color-mix(in srgb, var(--story-tone) 62%, var(--border));
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .scroll-story.is-enhanced .scroll-story__triggers {
+    position: absolute;
+    inset: 0;
+    display: block;
+    padding-top: 30svh;
+    pointer-events: none;
+  }
+
+  .scroll-story.is-enhanced .scroll-story__trigger {
+    height: 64svh;
+  }
+
+  .scroll-story.is-enhanced .scroll-story__cta {
+    position: absolute;
+    z-index: 3;
+    right: 0;
+    bottom: 1.5rem;
+    left: 0;
+    margin-top: 0;
+  }
+}
+
 @media (min-width: 640px) {
   .hero-stage__content,
   .scroll-story {
@@ -1042,6 +1113,82 @@ body {
 
   .media-scroll-story--skills .media-scroll-story__scene {
     align-items: start;
+  }
+
+  .media-scroll-story.is-enhanced {
+    min-height: calc(var(--media-story-count) * 70svh + 100svh);
+    padding-block: 0;
+  }
+
+  .media-scroll-story.is-enhanced .media-scroll-story__stage {
+    position: sticky;
+    z-index: 1;
+    top: 4.5rem;
+    display: grid;
+    min-height: calc(100svh - 4.5rem);
+    align-content: center;
+    padding-block: 1rem;
+  }
+
+  .media-scroll-story.is-enhanced .media-scroll-story__scenes {
+    position: relative;
+    min-height: min(44rem, calc(100svh - 7.5rem));
+  }
+
+  .media-scroll-story.is-enhanced .media-scroll-story__scene {
+    position: absolute;
+    inset: 0;
+    min-height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(1.25rem) scale(0.99);
+    visibility: hidden;
+    transition:
+      opacity 420ms ease,
+      transform 560ms cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 360ms ease,
+      box-shadow 420ms ease,
+      visibility 0s linear 560ms;
+  }
+
+  .media-scroll-story.is-enhanced .media-scroll-story__scene.is-active {
+    border-color: color-mix(
+      in srgb,
+      var(--media-story-tone) 60%,
+      var(--border)
+    );
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+    visibility: visible;
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--media-story-tone) 30%, transparent),
+      0 0 4.5rem color-mix(in srgb, var(--media-story-tone) 20%, transparent),
+      0 1.5rem 4rem var(--shadow);
+    transition-delay: 0s;
+  }
+
+  .media-scroll-story.is-enhanced
+    .media-scroll-story__scene.is-active
+    .media-scroll-story__image {
+    filter: saturate(0.94) contrast(1.06) brightness(0.91);
+    transform: scale(1.035);
+  }
+
+  .media-scroll-story.is-enhanced .media-scroll-story__progress {
+    margin-top: 0.75rem;
+  }
+
+  .media-scroll-story.is-enhanced .media-scroll-story__triggers {
+    position: absolute;
+    inset: 0;
+    display: block;
+    padding-top: 24svh;
+    pointer-events: none;
+  }
+
+  .media-scroll-story.is-enhanced .media-scroll-story__trigger {
+    height: 70svh;
   }
 }
 

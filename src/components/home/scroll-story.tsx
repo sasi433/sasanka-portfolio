@@ -81,9 +81,7 @@ export function ScrollStory({
   const headingId = `${id}-heading`;
 
   useEffect(() => {
-    const media = window.matchMedia(
-      "(prefers-reduced-motion: reduce), (max-width: 899px)",
-    );
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setEnhanced(!media.matches);
     const frame = requestAnimationFrame(update);
     media.addEventListener("change", update);
@@ -116,6 +114,7 @@ export function ScrollStory({
       id={id}
       aria-labelledby={headingId}
       className={`scroll-story ${enhanced ? "is-enhanced" : ""}`}
+      data-active-index={activeIndex}
       data-active-tone={items[activeIndex]?.tone ?? "burgundy"}
       style={{ "--story-count": items.length } as CSSProperties}
     >

@@ -31,11 +31,10 @@ export function HeroStage() {
     const reducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    const compactViewport = window.matchMedia("(max-width: 720px)").matches;
     const saveData = (navigator as NavigatorWithConnection).connection
       ?.saveData;
     const frame = requestAnimationFrame(() =>
-      setVideoEnabled(!reducedMotion && !compactViewport && !saveData),
+      setVideoEnabled(!reducedMotion && !saveData),
     );
     return () => cancelAnimationFrame(frame);
   }, []);
@@ -79,6 +78,7 @@ export function HeroStage() {
           className="hero-stage__video"
           data-media-theme={mediaTheme}
           aria-hidden="true"
+          autoPlay
           muted
           loop
           playsInline

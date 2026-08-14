@@ -348,11 +348,57 @@ test("mobile navigation manages focus and closes with Escape", async ({
 
   const dialog = page.getByRole("dialog", { name: "Navigation" });
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByRole("link", { name: "Home" })).toBeFocused();
+  const activeLink = dialog.getByRole("link", { name: "Home" });
+  await expect(activeLink).toBeFocused();
+
+  const activeIndicator = await activeLink.evaluate((element) => {
+    const style = getComputedStyle(element, "::after");
+    return { height: style.height, width: style.width };
+  });
+  expect(Number.parseFloat(activeIndicator.width)).toBeLessThanOrEqual(4);
+  expect(Number.parseFloat(activeIndicator.height)).toBeGreaterThanOrEqual(24);
 
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
+});
+
+test("mobile view retains safe hero motion and scroll-driven stories", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const video = page.locator(".hero-stage__video");
+  await expect(video).toBeAttached();
+  await expect(video).toHaveAttribute("autoplay", "");
+  await expect(video).toHaveAttribute("playsinline", "");
+  expect(
+    await video.evaluate((element) => (element as HTMLVideoElement).muted),
+  ).toBe(true);
+
+  const homeStory = page.locator("#engineering-summary");
+  await expect(homeStory).toHaveClass(/is-enhanced/);
+  await homeStory
+    .locator(".scroll-story__trigger")
+    .nth(1)
+    .evaluate((element) => element.scrollIntoView({ block: "center" }));
+  await expect(homeStory).toHaveAttribute("data-active-index", "1");
+  await expect(homeStory.locator(".scroll-story__scene").nth(1)).toHaveClass(
+    /is-active/,
+  );
+
+  await page.goto("/skills");
+  const skillsStory = page.locator("#skills-story");
+  await expect(skillsStory).toHaveClass(/is-enhanced/);
+  await skillsStory
+    .locator(".media-scroll-story__trigger")
+    .nth(1)
+    .evaluate((element) => element.scrollIntoView({ block: "center" }));
+  await expect(skillsStory).toHaveAttribute("data-active-index", "1");
+  await expect(
+    skillsStory.locator(".media-scroll-story__scene").nth(1),
+  ).toHaveClass(/is-active/);
 });
 
 test("skip link reaches the main content", async ({ page }) => {

@@ -135,9 +135,7 @@ export function MediaScrollStory({
   const [enhanced, setEnhanced] = useState(false);
 
   useEffect(() => {
-    const media = window.matchMedia(
-      "(prefers-reduced-motion: reduce), (max-width: 899px)",
-    );
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setEnhanced(!media.matches);
     const frame = requestAnimationFrame(update);
     media.addEventListener("change", update);
