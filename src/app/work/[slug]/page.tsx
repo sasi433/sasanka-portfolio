@@ -5,7 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import { ExternalLink } from "@/components/ui/external-link";
 import { SectionContainer } from "@/components/ui/section-container";
 import { CaseStudyDiagram } from "@/components/work/case-study-diagram";
-import { getWorkItem, workItems, workStatusLabels } from "@/content/work";
+import {
+  getWorkItem,
+  workCategoryLabels,
+  workExecutionModelLabels,
+  workItems,
+  workStatusLabels,
+} from "@/content/work";
 
 type WorkDetailProps = { params: Promise<{ slug: string }> };
 
@@ -44,14 +50,15 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
   return (
     <article className="page-shell">
       <PageIntro
-        eyebrow={
-          item.type === "application" ? "Application" : "Engineering case study"
-        }
+        eyebrow={workCategoryLabels[item.category]}
         title={item.title}
         description={item.summary}
       />
       <SectionContainer className="pb-20 sm:pb-24">
-        <Badge>{item.statusLabel ?? workStatusLabels[item.status]}</Badge>
+        <div className="flex flex-wrap gap-2">
+          <Badge>{item.statusLabel ?? workStatusLabels[item.status]}</Badge>
+          <Badge>{workExecutionModelLabels[item.executionModel]}</Badge>
+        </div>
         <div className="mt-10 max-w-3xl space-y-12">
           {sections.map((section) => (
             <section
@@ -111,16 +118,23 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
               ))}
             </div>
           </section>
-          {item.githubUrl ? (
-            <ExternalLink href={item.githubUrl}>
-              View GitHub repository
-            </ExternalLink>
-          ) : null}
-          {item.liveUrl ? (
-            <ExternalLink href={item.liveUrl}>
-              View live application
-            </ExternalLink>
-          ) : null}
+          <div className="flex flex-wrap gap-x-6 gap-y-3">
+            {item.githubUrl ? (
+              <ExternalLink href={item.githubUrl}>
+                View GitHub repository
+              </ExternalLink>
+            ) : null}
+            {item.release?.url ? (
+              <ExternalLink href={item.release.url}>
+                View {item.release.label} release
+              </ExternalLink>
+            ) : null}
+            {item.executionModel === "live-web-application" && item.liveUrl ? (
+              <ExternalLink href={item.liveUrl}>
+                View live application
+              </ExternalLink>
+            ) : null}
+          </div>
           {item.confidentialityNote ? (
             <p className="border-l-2 border-[var(--accent)] pl-4 text-sm leading-6 text-[var(--text-secondary)]">
               {item.confidentialityNote}

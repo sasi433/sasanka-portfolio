@@ -3,7 +3,11 @@ import { ArrowRight, Boxes, Braces, Code2, Workflow } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { WorkItem } from "@/content/types";
-import { workStatusLabels } from "@/content/work";
+import {
+  workCategoryBadgeLabels,
+  workExecutionModelLabels,
+  workStatusLabels,
+} from "@/content/work";
 
 export function WorkCard({ item }: { item: WorkItem }) {
   const VisualIcon = item.githubUrl
@@ -24,10 +28,9 @@ export function WorkCard({ item }: { item: WorkItem }) {
         <span className="work-card__signal" />
       </div>
       <div className="flex flex-wrap gap-2">
-        <Badge>
-          {item.type === "application" ? "Application" : "Case study"}
-        </Badge>
+        <Badge>{workCategoryBadgeLabels[item.category]}</Badge>
         <Badge>{item.statusLabel ?? workStatusLabels[item.status]}</Badge>
+        <Badge>{workExecutionModelLabels[item.executionModel]}</Badge>
       </div>
       <h2 className="mt-5 text-xl font-semibold text-[var(--text-primary)]">
         {item.shortTitle ?? item.title}

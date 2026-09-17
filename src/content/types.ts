@@ -39,8 +39,8 @@ export type WorkItem = {
   type: WorkType;
   status: WorkStatus;
   statusLabel?: string;
-  category?: WorkCategory;
-  executionModel?: WorkExecutionModel;
+  category: WorkCategory;
+  executionModel: WorkExecutionModel;
   release?: WorkRelease;
   featured: boolean;
   summary: string;

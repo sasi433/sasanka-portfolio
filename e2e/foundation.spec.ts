@@ -118,8 +118,15 @@ test("all Phase 2 routes and curated work details load", async ({ page }) => {
     "/contact",
     "/contact/sent",
     "/privacy",
+    "/work/document-support-rag-chatbot",
     "/work/production-incident-simulator",
+    "/work/log-report-automation",
+    "/work/personal-portfolio-platform",
     "/work/shared-python-libraries",
+    "/work/container-image-delivery-workflow",
+    "/work/build-reliability-fail-fast-validation",
+    "/work/telecom-failure-triage",
+    "/work/microphone-array-localization",
   ]) {
     const response = await page.goto(route);
     expect(response?.status(), route).toBe(200);
@@ -135,25 +142,29 @@ test("unknown work slugs use the custom not-found page", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("work is segmented and external repository links are secure", async ({
+test("work is grouped with truthful status and external link behavior", async ({
   page,
 }) => {
   await page.goto("/work");
   await expect(
     page.getByRole("heading", {
-      name: "Public projects built to solve and explore.",
+      name: "Public systems built to solve, automate and explore.",
     }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", {
-      name: "Professional work, explained without proprietary detail.",
+      name: "Engineering contributions explained without proprietary detail.",
     }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", {
-      name: "Active work shown with an honest status.",
+      name: "Reproducible technical work with clearly bounded claims.",
     }),
   ).toBeVisible();
+  await expect(
+    page.getByText("Technical / academic", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2 })).toHaveCount(12);
 
   await page.goto("/work/log-report-automation");
   const repositoryLink = page.getByRole("link", {
@@ -161,6 +172,28 @@ test("work is segmented and external repository links are secure", async ({
   });
   await expect(repositoryLink).toHaveAttribute("target", "_blank");
   await expect(repositoryLink).toHaveAttribute("rel", /noopener/);
+  await expect(
+    page.getByRole("link", { name: /live application/i }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByText("Local CLI utility", { exact: true }),
+  ).toBeVisible();
+
+  await page.goto("/work/personal-portfolio-platform");
+  const liveLink = page.getByRole("link", { name: "View live application" });
+  await expect(liveLink).toHaveAttribute(
+    "href",
+    "https://portfolio.sasanka-maddala.workers.dev/",
+  );
+
+  await page.goto("/work/microphone-array-localization");
+  const releaseLink = page.getByRole("link", {
+    name: "View v1.0.0 release",
+  });
+  await expect(releaseLink).toHaveAttribute(
+    "href",
+    "https://github.com/sasi433/microphone-array-localization/releases/tag/v1.0.0",
+  );
   await expect(
     page.getByRole("link", { name: /live application/i }),
   ).toHaveCount(0);
@@ -567,6 +600,8 @@ test("SEO endpoints and preview indexing policy are present", async ({
   const sitemap = await request.get("/sitemap.xml");
   expect(sitemap.status()).toBe(200);
   expect(await sitemap.text()).toContain("/work/production-incident-simulator");
+  expect(await sitemap.text()).toContain("/work/personal-portfolio-platform");
+  expect(await sitemap.text()).toContain("/work/microphone-array-localization");
   const robots = await request.get("/robots.txt");
   expect(await robots.text()).toContain("Disallow: /");
   expect((await request.get("/opengraph-image")).status()).toBe(200);

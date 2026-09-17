@@ -61,7 +61,7 @@ const impacts = [
 export default function Home() {
   const featured = workItems.filter((item) => item.featured).slice(0, 4);
   const building = workItems.find(
-    (item) => item.slug === "document-support-rag-chatbot",
+    (item) => item.status === "currently-building",
   );
 
   return (

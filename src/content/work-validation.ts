@@ -33,6 +33,14 @@ export function getWorkContentIssues(items: readonly WorkItem[]) {
     }
     slugs.add(item.slug);
 
+    if (!item.category) {
+      issues.push(`${item.slug}: category is required`);
+    }
+
+    if (!item.executionModel) {
+      issues.push(`${item.slug}: execution model is required`);
+    }
+
     const requiredCollections = [
       ["approach", item.approach],
       ["decisions", item.decisions],
