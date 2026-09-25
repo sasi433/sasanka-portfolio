@@ -166,6 +166,41 @@ test("work is grouped with truthful status and external link behavior", async ({
   ).toBeVisible();
   await expect(page.getByRole("heading", { level: 2 })).toHaveCount(12);
 
+  const applicationCard = page.locator(
+    '[data-work-slug="production-incident-simulator"]',
+  );
+  const applicationImage = applicationCard.getByRole("img", {
+    name: /healthy checkout flow/i,
+  });
+  await expect(applicationImage).toBeVisible();
+  await expect(applicationImage).toHaveAttribute("loading", "lazy");
+  await expect(applicationCard.getByRole("img")).toHaveCount(1);
+  const projectLink = applicationCard.getByRole("link", {
+    name: "View project",
+  });
+  await projectLink.focus();
+  await expect(projectLink).toBeFocused();
+  await expect(
+    applicationCard.getByRole("link", {
+      name: /Open Production Incident Simulator GitHub repository/,
+    }),
+  ).toHaveAttribute("target", "_blank");
+  await expect(
+    applicationCard.getByText("FastAPI", { exact: true }),
+  ).toBeVisible();
+
+  const professionalCard = page.locator(
+    '[data-work-slug="shared-python-libraries"]',
+  );
+  await expect(professionalCard.getByRole("img")).toHaveCount(0);
+  await expect(
+    professionalCard.getByRole("link", { name: "Read case study" }),
+  ).toBeVisible();
+  await expect(
+    professionalCard.getByText("GitHub", { exact: true }),
+  ).toHaveCount(0);
+  await expect(page.locator(".work-card img")).toHaveCount(5);
+
   await page.goto("/work/log-report-automation");
   const repositoryLink = page.getByRole("link", {
     name: /View GitHub repository/,

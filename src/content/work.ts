@@ -57,6 +57,54 @@ export const workItems: readonly WorkItem[] = [
       "pytest",
       "Ruff",
     ],
+    heroImage: {
+      src: "/images/projects/document-support-rag-chatbot/application-overview.webp",
+      alt: "Document Support RAG interface with document upload, indexed files and a grounded question panel.",
+      width: 788,
+      height: 843,
+    },
+    screenshots: [
+      {
+        src: "/images/projects/document-support-rag-chatbot/application-overview.webp",
+        alt: "Document Support RAG interface with document upload, indexed files and a grounded question panel.",
+        width: 788,
+        height: 843,
+        caption:
+          "Local browser interface for document ingestion and grounded questions.",
+      },
+      {
+        src: "/images/projects/document-support-rag-chatbot/grounded-answer-sources.webp",
+        alt: "Grounded support answer displayed beside retrieved source references.",
+        width: 1163,
+        height: 912,
+        caption:
+          "A grounded answer keeps the retrieved source excerpts visible.",
+      },
+      {
+        src: "/images/projects/document-support-rag-chatbot/contextual-follow-up.webp",
+        alt: "Follow-up support question answered with conversation context and source references.",
+        width: 587,
+        height: 903,
+        caption:
+          "A contextual follow-up preserves the visible grounding trail.",
+      },
+      {
+        src: "/images/projects/document-support-rag-chatbot/kubernetes-troubleshooting.webp",
+        alt: "Kubernetes rollback question with a source-grounded troubleshooting answer.",
+        width: 1133,
+        height: 918,
+        caption:
+          "Document-scoped Kubernetes troubleshooting with cited support content.",
+      },
+      {
+        src: "/images/projects/document-support-rag-chatbot/grounded-fallback.webp",
+        alt: "Document Support RAG interface declining to answer a question unsupported by indexed documents.",
+        width: 1151,
+        height: 893,
+        caption:
+          "The bounded fallback avoids presenting an unsupported answer.",
+      },
+    ],
     githubUrl: "https://github.com/sasi433/document-support-rag-chatbot",
   },
   {
@@ -111,6 +159,38 @@ export const workItems: readonly WorkItem[] = [
       "Grafana",
       "Structured logging",
     ],
+    heroImage: {
+      src: "/images/projects/production-incident-simulator/healthy-checkout-flow.webp",
+      alt: "Production Incident Simulator interface showing a healthy checkout flow and correlation identifier.",
+      width: 988,
+      height: 908,
+    },
+    screenshots: [
+      {
+        src: "/images/projects/production-incident-simulator/healthy-checkout-flow.webp",
+        alt: "Production Incident Simulator interface showing a healthy checkout flow and correlation identifier.",
+        width: 988,
+        height: 908,
+        caption:
+          "The healthy local checkout flow before a deterministic incident is introduced.",
+      },
+      {
+        src: "/images/projects/production-incident-simulator/grafana-healthy-baseline.webp",
+        alt: "Grafana dashboard showing the healthy baseline for the incident simulation.",
+        width: 1600,
+        height: 757,
+        caption:
+          "Provisioned Grafana panels provide a healthy operational baseline.",
+      },
+      {
+        src: "/images/projects/production-incident-simulator/grafana-checkout-incident.webp",
+        alt: "Grafana dashboard showing checkout errors during a deterministic incident.",
+        width: 1600,
+        height: 759,
+        caption:
+          "The same dashboard exposes error ratio and incident-trigger changes.",
+      },
+    ],
     githubUrl: "https://github.com/sasi433/production-incident-simulator",
   },
   {
@@ -161,6 +241,46 @@ export const workItems: readonly WorkItem[] = [
       "pytest",
       "GitHub Actions",
       "CLI development",
+    ],
+    heroImage: {
+      src: "/images/projects/log-report-automation/summary-dashboard.webp",
+      alt: "Generated Excel summary dashboard with reliability metrics and an errors-by-service chart.",
+      width: 1376,
+      height: 794,
+    },
+    screenshots: [
+      {
+        src: "/images/projects/log-report-automation/summary-dashboard.webp",
+        alt: "Generated Excel summary dashboard with reliability metrics and an errors-by-service chart.",
+        width: 1376,
+        height: 794,
+        caption:
+          "A stakeholder-facing summary combines reliability metrics, service detail and charts.",
+      },
+      {
+        src: "/images/projects/log-report-automation/filterable-log-report.webp",
+        alt: "Filterable Excel worksheet containing structured service log records.",
+        width: 785,
+        height: 831,
+        caption:
+          "Validated source records remain available in a filterable worksheet.",
+      },
+      {
+        src: "/images/projects/log-report-automation/daily-operational-trends.webp",
+        alt: "Excel worksheet with daily reliability metrics and an error trend chart.",
+        width: 1592,
+        height: 830,
+        caption:
+          "Daily aggregation makes operational trends easier to inspect.",
+      },
+      {
+        src: "/images/projects/log-report-automation/data-quality-validation.webp",
+        alt: "Excel data-quality worksheet listing rejected input rows and validation reasons.",
+        width: 1005,
+        height: 828,
+        caption:
+          "Rejected rows and validation findings are retained as explicit report evidence.",
+      },
     ],
     githubUrl: "https://github.com/sasi433/log-report-automation",
   },
@@ -217,6 +337,12 @@ export const workItems: readonly WorkItem[] = [
       "Turnstile",
       "Resend",
     ],
+    heroImage: {
+      src: "/images/projects/personal-portfolio-platform/portfolio-home.webp",
+      alt: "Sasanka Maddala portfolio homepage in the dark theme.",
+      width: 1440,
+      height: 900,
+    },
     githubUrl: "https://github.com/sasi433/sasanka-portfolio",
     liveUrl: "https://portfolio.sasanka-maddala.workers.dev/",
   },
@@ -468,6 +594,30 @@ export const workItems: readonly WorkItem[] = [
       "LMS",
       "GCC-PHAT",
       "Deterministic testing",
+    ],
+    heroImage: {
+      src: "/images/projects/microphone-array-localization/estimator-comparison.webp",
+      alt: "Estimator comparison chart from the synchronized two-dimensional localization simulation.",
+      width: 1387,
+      height: 976,
+    },
+    screenshots: [
+      {
+        src: "/images/projects/microphone-array-localization/estimator-comparison.webp",
+        alt: "Estimator comparison chart from the synchronized two-dimensional localization simulation.",
+        width: 1387,
+        height: 976,
+        caption:
+          "Reproducible simulation comparison on identical synthetic signals; this is not a general real-world accuracy claim.",
+      },
+      {
+        src: "/images/projects/microphone-array-localization/error-vs-snr.webp",
+        alt: "Localization error by requested signal-to-noise ratio for deterministic simulation trials.",
+        width: 1389,
+        height: 976,
+        caption:
+          "Reproducible LMS phase simulation results across selected SNR conditions; this is not a general real-world accuracy claim.",
+      },
     ],
     githubUrl: "https://github.com/sasi433/microphone-array-localization",
   },

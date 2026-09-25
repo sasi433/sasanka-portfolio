@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   getWorkItemsByCategory,
@@ -148,6 +150,44 @@ describe("work content", () => {
     expect(getWorkContentIssues(workItems)).toEqual([]);
   });
 
+  it("uses optimized local evidence for every application", () => {
+    const applications = workItems.filter(
+      (item) => item.type === "application",
+    );
+
+    expect(applications).toHaveLength(5);
+    for (const item of applications) {
+      expect(item.heroImage, item.slug).toBeDefined();
+      expect(item.heroImage?.src).toMatch(
+        new RegExp(`^/images/projects/${item.slug}/.+\\.webp$`),
+      );
+
+      for (const media of [item.heroImage, ...(item.screenshots ?? [])]) {
+        expect(media, item.slug).toBeDefined();
+        expect(
+          existsSync(path.join(process.cwd(), "public", media!.src)),
+          media!.src,
+        ).toBe(true);
+        expect(media!.width).toBeGreaterThan(0);
+        expect(media!.height).toBeGreaterThan(0);
+      }
+    }
+
+    const publishedMediaPaths = workItems.flatMap((item) => [
+      ...(item.heroImage ? [item.heroImage.src] : []),
+      ...(item.screenshots ?? []).map((media) => media.src),
+    ]);
+    expect(publishedMediaPaths).not.toContain(
+      "/images/projects/document-support-rag-chatbot/06-ci-validation.webp",
+    );
+    expect(publishedMediaPaths).not.toContain(
+      "/images/projects/production-incident-simulator/request-id-correlation.webp",
+    );
+    expect(publishedMediaPaths).not.toContain(
+      "/images/projects/log-report-automation/cli-report-generation.webp",
+    );
+  });
+
   it("accepts verified release, media and detail-section metadata", () => {
     const item: WorkItem = {
       ...exampleWorkItem,
@@ -160,11 +200,15 @@ describe("work content", () => {
       heroImage: {
         src: "/images/projects/example-project/hero.png",
         alt: "Example project output",
+        width: 1200,
+        height: 675,
       },
       screenshots: [
         {
           src: "/images/projects/example-project/result.png",
           alt: "Example result",
+          width: 1200,
+          height: 675,
           caption: "A reproducible simulated result.",
         },
       ],
@@ -194,6 +238,22 @@ describe("work content", () => {
     expect(getWorkContentIssues([item])).toEqual([
       "example-project: live URL requires the live-web-application execution model",
       "example-project: release URL must target a GitHub release tag",
+    ]);
+  });
+
+  it("rejects media without publishable dimensions", () => {
+    const item: WorkItem = {
+      ...exampleWorkItem,
+      heroImage: {
+        src: "/images/projects/example-project/hero.webp",
+        alt: "Example project output",
+        width: 0,
+        height: 675,
+      },
+    };
+
+    expect(getWorkContentIssues([item])).toEqual([
+      "example-project: hero image requires positive integer dimensions",
     ]);
   });
 });

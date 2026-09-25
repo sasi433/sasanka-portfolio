@@ -21,6 +21,15 @@ function validateMedia(
   if (!media.alt.trim()) {
     issues.push(`${slug}: ${label} requires alt text`);
   }
+
+  if (
+    !Number.isInteger(media.width) ||
+    media.width <= 0 ||
+    !Number.isInteger(media.height) ||
+    media.height <= 0
+  ) {
+    issues.push(`${slug}: ${label} requires positive integer dimensions`);
+  }
 }
 
 export function getWorkContentIssues(items: readonly WorkItem[]) {
