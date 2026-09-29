@@ -188,6 +188,55 @@ describe("work content", () => {
     );
   });
 
+  it("gives every application an evidence-led engineering case study", () => {
+    const applications = workItems.filter(
+      (item) => item.type === "application",
+    );
+    const requiredSectionIds = [
+      "architecture-workflow",
+      "reliability-security",
+      "validation-testing",
+      "scope-limitations",
+    ];
+
+    for (const item of applications) {
+      expect(
+        item.detailSections?.map((section) => section.id),
+        item.slug,
+      ).toEqual(requiredSectionIds);
+
+      const evidence = item.screenshots?.length
+        ? item.screenshots
+        : item.heroImage
+          ? [item.heroImage]
+          : [];
+      expect(evidence.length, item.slug).toBeGreaterThan(0);
+      for (const media of evidence) {
+        expect(media.caption?.trim(), media.src).toBeTruthy();
+      }
+    }
+  });
+
+  it("bounds microphone evidence to reproducible simulation claims", () => {
+    const microphone = workItems.find(
+      (item) => item.slug === "microphone-array-localization",
+    );
+
+    expect(microphone?.screenshots).toHaveLength(2);
+    for (const screenshot of microphone?.screenshots ?? []) {
+      expect(screenshot.caption).toMatch(/reproducible/i);
+      expect(screenshot.caption).toMatch(/simulation/i);
+      expect(screenshot.caption).toMatch(
+        /not a general real-world accuracy claim/i,
+      );
+    }
+    expect(
+      microphone?.detailSections?.find(
+        (section) => section.id === "scope-limitations",
+      )?.body,
+    ).toMatch(/not claims of general real-world localization accuracy/i);
+  });
+
   it("accepts verified release, media and detail-section metadata", () => {
     const item: WorkItem = {
       ...exampleWorkItem,

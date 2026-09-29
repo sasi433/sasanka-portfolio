@@ -234,6 +234,88 @@ test("work is grouped with truthful status and external link behavior", async ({
   ).toHaveCount(0);
 });
 
+test("application detail pages present accessible evidence and truthful actions", async ({
+  page,
+}) => {
+  await page.goto("/work/document-support-rag-chatbot");
+  await expect(
+    page.getByRole("heading", { name: "Architecture / workflow" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Key engineering decisions" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Current scope / limitations" }),
+  ).toBeVisible();
+
+  const ragGallery = page.locator("[data-project-gallery]");
+  await expect(ragGallery.getByRole("figure")).toHaveCount(5);
+  await expect(ragGallery.locator("figcaption")).toHaveCount(5);
+  await expect(ragGallery.getByRole("img")).toHaveCount(5);
+  await expect(ragGallery.getByRole("img").first()).toHaveAttribute(
+    "loading",
+    "lazy",
+  );
+  await expect(
+    page.getByRole("link", { name: "View GitHub repository" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /release|live application/i }),
+  ).toHaveCount(0);
+
+  await page.goto("/work/personal-portfolio-platform");
+  await expect(page.locator("[data-project-gallery] figure")).toHaveCount(1);
+  await expect(
+    page.getByRole("link", { name: "View GitHub repository" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "View live application" }),
+  ).toBeVisible();
+  await expect(page.getByRole("link", { name: /release/i })).toHaveCount(0);
+
+  await page.goto("/work/microphone-array-localization");
+  await expect(page.locator("[data-project-gallery] figure")).toHaveCount(2);
+  await expect(
+    page.getByText(/not a general real-world accuracy claim/i),
+  ).toHaveCount(2);
+  await expect(
+    page.getByRole("link", { name: "View v1.0.0 release" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /live application/i }),
+  ).toHaveCount(0);
+
+  await page.goto("/work/shared-python-libraries");
+  await expect(page.locator("[data-project-gallery]")).toHaveCount(0);
+  await expect(
+    page.getByRole("heading", { name: "Technical decisions" }),
+  ).toBeVisible();
+});
+
+test("application evidence remains legible at mobile width", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/work/document-support-rag-chatbot");
+
+  const gallery = page.locator("[data-project-gallery]");
+  await gallery.scrollIntoViewIfNeeded();
+  const firstFigure = gallery.getByRole("figure").first();
+  await expect(firstFigure).toBeVisible();
+  await expect(firstFigure.locator("figcaption")).toBeVisible();
+  await expect
+    .poll(() =>
+      firstFigure
+        .getByRole("img")
+        .evaluate((image) => (image as HTMLImageElement).naturalWidth),
+    )
+    .toBeGreaterThan(0);
+
+  const bounds = await firstFigure.boundingBox();
+  expect(bounds?.x).toBeGreaterThanOrEqual(0);
+  expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBeLessThanOrEqual(390);
+});
+
 test("contact form is accessible and safely reports missing external setup", async ({
   page,
   request,

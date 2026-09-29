@@ -37,6 +37,40 @@ export const workItems: readonly WorkItem[] = [
           "The project supports local and self-hosted execution but is not advertised as a public hosted service.",
       },
     ],
+    detailSections: [
+      {
+        id: "architecture-workflow",
+        title: "Architecture / workflow",
+        items: [
+          "Documents enter through the browser or FastAPI interface and are converted into searchable chunks.",
+          "OpenAI embeddings represent those chunks and ChromaDB persists the local retrieval index.",
+          "A question retrieves relevant context before the response is returned with visible source references.",
+        ],
+      },
+      {
+        id: "reliability-security",
+        title: "Reliability / security considerations",
+        items: [
+          "Unsupported questions use a bounded fallback instead of presenting an ungrounded answer.",
+          "Source excerpts remain visible so a user can inspect the evidence behind a response.",
+          "Deployment is described as local or self-hosted; no public hosted service is implied.",
+        ],
+      },
+      {
+        id: "validation-testing",
+        title: "Validation / testing",
+        items: [
+          "pytest covers the Python implementation and Ruff enforces code-quality checks.",
+          "Captured scenarios verify grounded answers, contextual follow-ups and bounded fallback behaviour.",
+          "Docker, Compose and single-instance Kubernetes paths document repeatable local execution.",
+        ],
+      },
+      {
+        id: "scope-limitations",
+        title: "Current scope / limitations",
+        body: "The completed v1 is a local, self-hosted engineering project. It depends on configured OpenAI access for embeddings and answers, and it is not presented as a public production service.",
+      },
+    ],
     challenges: [
       "Balancing retrieval relevance, source transparency and useful fallback behaviour.",
     ],
@@ -139,6 +173,40 @@ export const workItems: readonly WorkItem[] = [
           "Real service boundaries create useful operational exercises without claiming production deployment.",
       },
     ],
+    detailSections: [
+      {
+        id: "architecture-workflow",
+        title: "Architecture / workflow",
+        items: [
+          "Nginx fronts a FastAPI service that coordinates PostgreSQL and Redis within Docker Compose.",
+          "Deterministic incident controls alter bounded failure conditions while the same request path remains observable.",
+          "Structured logs, correlation IDs, Prometheus metrics and provisioned Grafana panels support investigation and recovery practice.",
+        ],
+      },
+      {
+        id: "reliability-security",
+        title: "Reliability / security considerations",
+        items: [
+          "Failure modes are intentional and repeatable, keeping experiments comparable and locally contained.",
+          "Healthy baselines and incident states use the same telemetry so changes can be traced rather than guessed.",
+          "The lab models production-style boundaries without claiming that it is a production deployment.",
+        ],
+      },
+      {
+        id: "validation-testing",
+        title: "Validation / testing",
+        items: [
+          "The documented workflow starts from a healthy checkout and then introduces deterministic incidents.",
+          "Provisioned dashboards expose baseline and incident-state changes for repeatable inspection.",
+          "Recovery guidance and postmortem-oriented evidence keep the exercise reproducible.",
+        ],
+      },
+      {
+        id: "scope-limitations",
+        title: "Current scope / limitations",
+        body: "This is a local Docker Compose incident lab for engineering practice. Its services and failures are deliberately bounded simulations, not a hosted commerce service or a record of production incidents.",
+      },
+    ],
     challenges: [
       "Keeping failure scenarios realistic, observable, repeatable and safe to run locally.",
     ],
@@ -223,6 +291,40 @@ export const workItems: readonly WorkItem[] = [
         title: "Treat spreadsheet output as a security boundary",
         explanation:
           "Potential formula input is handled explicitly before data is written to Excel.",
+      },
+    ],
+    detailSections: [
+      {
+        id: "architecture-workflow",
+        title: "Architecture / workflow",
+        items: [
+          "The CLI reads structured CSV logs and applies strict or lenient validation before analysis.",
+          "Validated records feed reliability calculations, including error rates and response-time percentiles.",
+          "The reporting layer writes formatted Excel worksheets, charts and explicit data-quality findings.",
+        ],
+      },
+      {
+        id: "reliability-security",
+        title: "Reliability / security considerations",
+        items: [
+          "Validation failures remain visible instead of silently disappearing from the report.",
+          "Untrusted text is handled before workbook output to reduce spreadsheet formula-execution risk.",
+          "A command-line interface makes the same transformation repeatable in local scripts and CI.",
+        ],
+      },
+      {
+        id: "validation-testing",
+        title: "Validation / testing",
+        items: [
+          "pytest covers the report-generation path and its data-handling behaviour.",
+          "Generated workbooks are checked through summary, detail, trend and data-quality views.",
+          "GitHub Actions provides automated validation for the public repository.",
+        ],
+      },
+      {
+        id: "scope-limitations",
+        title: "Current scope / limitations",
+        body: "The completed v1 is a local batch-reporting utility. It produces Excel artifacts from supplied CSV data; it is not a live monitoring platform, database or hosted analytics service.",
       },
     ],
     challenges: [
@@ -316,6 +418,40 @@ export const workItems: readonly WorkItem[] = [
           "Security, privacy, accessibility and deployment checks are treated as product requirements rather than launch extras.",
       },
     ],
+    detailSections: [
+      {
+        id: "architecture-workflow",
+        title: "Architecture / workflow",
+        items: [
+          "Typed content feeds reusable Next.js routes and server-rendered portfolio pages.",
+          "Responsive React components layer themes, accessible navigation and motion-aware storytelling over that content.",
+          "OpenNext packages the application for Cloudflare Workers, while the contact route verifies Turnstile before Resend delivery.",
+        ],
+      },
+      {
+        id: "reliability-security",
+        title: "Reliability / security considerations",
+        items: [
+          "Turnstile verification, rate limiting and server-side validation protect the public contact workflow.",
+          "Reduced-motion support and keyboard-accessible interaction keep core content available without animation.",
+          "Privacy review and typed project data keep public claims and external links deliberate.",
+        ],
+      },
+      {
+        id: "validation-testing",
+        title: "Validation / testing",
+        items: [
+          "Vitest covers content and component behaviour, while Playwright exercises routes, responsive layouts and accessibility checks.",
+          "The release gate includes linting, type checking, Next.js builds and an OpenNext Cloudflare dry run.",
+          "GitHub CI and Cloudflare Workers Builds validate each committed production change.",
+        ],
+      },
+      {
+        id: "scope-limitations",
+        title: "Current scope / limitations",
+        body: "This is a maintained personal portfolio and a demonstration of modern web delivery. It does not present frontend development as prior professional employment, and a custom domain remains outside the current v1 scope.",
+      },
+    ],
     challenges: [
       "Balancing visual motion and scrollytelling with mobile usability, performance and reduced-motion support.",
     ],
@@ -342,6 +478,8 @@ export const workItems: readonly WorkItem[] = [
       alt: "Sasanka Maddala portfolio homepage in the dark theme.",
       width: 1440,
       height: 900,
+      caption:
+        "The live responsive portfolio homepage in its default dark theme.",
     },
     githubUrl: "https://github.com/sasi433/sasanka-portfolio",
     liveUrl: "https://portfolio.sasanka-maddala.workers.dev/",
@@ -576,6 +714,40 @@ export const workItems: readonly WorkItem[] = [
         title: "Multiple estimators behind one workflow",
         explanation:
           "A shared configuration and result structure makes estimator behaviour easier to compare.",
+      },
+    ],
+    detailSections: [
+      {
+        id: "architecture-workflow",
+        title: "Architecture / workflow",
+        items: [
+          "A shared configuration defines a synchronized two-dimensional direct-path simulation and stationary synthetic source.",
+          "LMS peak, LMS phase-slope and independently implemented GCC-PHAT estimators process comparable simulated signals.",
+          "The result workflow produces deterministic figures for estimator comparison and selected signal-to-noise conditions.",
+        ],
+      },
+      {
+        id: "reliability-security",
+        title: "Reliability / scientific boundaries",
+        items: [
+          "Deterministic configuration keeps repeated simulation runs explainable and comparable.",
+          "Every result is labelled as simulated output rather than field validation or production acoustic performance.",
+          "A published release fixes the reviewed v1.0.0 project state represented here.",
+        ],
+      },
+      {
+        id: "validation-testing",
+        title: "Validation / testing",
+        items: [
+          "Deterministic MATLAB tests exercise the selectable estimator workflow.",
+          "Reproducible figures compare estimators on identical synthetic inputs and selected SNR scenarios.",
+          "The public v1.0.0 release provides a stable reference for the published results.",
+        ],
+      },
+      {
+        id: "scope-limitations",
+        title: "Current scope / limitations",
+        body: "The project evaluates selected synchronized, direct-path, two-dimensional synthetic scenarios. The figures are reproducible simulation results and are not claims of general real-world localization accuracy.",
       },
     ],
     challenges: [
