@@ -64,6 +64,14 @@ describe("work content", () => {
     }
   });
 
+  it("keeps Security Master out of the standalone Work catalog", () => {
+    expect(
+      workItems.some((item) =>
+        `${item.slug} ${item.title} ${item.summary}`.match(/security master/i),
+      ),
+    ).toBe(false);
+  });
+
   it("uses unique slugs and complete case-study sections", () => {
     expect(new Set(workItems.map((item) => item.slug)).size).toBe(
       workItems.length,

@@ -316,6 +316,81 @@ test("application evidence remains legible at mobile width", async ({
   expect((bounds?.x ?? 0) + (bounds?.width ?? 0)).toBeLessThanOrEqual(390);
 });
 
+test("professional case studies use distinct accessible sanitized diagrams", async ({
+  page,
+}) => {
+  const diagrams = [
+    {
+      slug: "shared-python-libraries",
+      name: "Shared capability adoption",
+      kind: "shared-capabilities",
+    },
+    {
+      slug: "container-image-delivery-workflow",
+      name: "Validated container delivery",
+      kind: "delivery-pipeline",
+    },
+    {
+      slug: "build-reliability-fail-fast-validation",
+      name: "Fail-fast build ownership",
+      kind: "validation-gates",
+    },
+    {
+      slug: "telecom-failure-triage",
+      name: "Evidence-led failure triage",
+      kind: "triage-decision",
+    },
+  ];
+
+  for (const diagram of diagrams) {
+    await page.goto(`/work/${diagram.slug}`);
+    const figure = page.getByRole("figure", { name: diagram.name });
+    await expect(figure).toBeVisible();
+    await expect(figure).toHaveAttribute(
+      "data-professional-diagram",
+      diagram.kind,
+    );
+    await expect(figure.locator("a, button, [tabindex]")).toHaveCount(0);
+    await expect(
+      page.getByText(/confidential|sanitised|generic|generalised/i).last(),
+    ).toBeVisible();
+  }
+
+  await page.goto("/work");
+  await expect(page.getByText(/security master/i)).toHaveCount(0);
+  await page.goto("/experience");
+  await expect(page.getByText(/team's security master/i).first()).toBeVisible();
+});
+
+test("professional diagrams fit required responsive widths", async ({
+  page,
+}) => {
+  const slugs = [
+    "shared-python-libraries",
+    "container-image-delivery-workflow",
+    "build-reliability-fail-fast-validation",
+    "telecom-failure-triage",
+  ];
+
+  for (const width of [360, 390, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const slug of slugs) {
+      await page.goto(`/work/${slug}`);
+      const diagram = page.locator("[data-professional-diagram]");
+      await expect(diagram).toBeVisible();
+      const bounds = await diagram.boundingBox();
+      expect(
+        bounds?.x,
+        `${slug} starts outside ${width}px`,
+      ).toBeGreaterThanOrEqual(0);
+      expect(
+        (bounds?.x ?? 0) + (bounds?.width ?? 0),
+        `${slug} exceeds ${width}px`,
+      ).toBeLessThanOrEqual(width);
+    }
+  }
+});
+
 test("contact form is accessible and safely reports missing external setup", async ({
   page,
   request,
@@ -670,6 +745,9 @@ test("core routes have no serious automated accessibility violations", async ({
     "/contact",
     "/privacy",
     "/work/shared-python-libraries",
+    "/work/container-image-delivery-workflow",
+    "/work/build-reliability-fail-fast-validation",
+    "/work/telecom-failure-triage",
   ]) {
     await page.goto(route);
     await waitForPageAnimation(page);

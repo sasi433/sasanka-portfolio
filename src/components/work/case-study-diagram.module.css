@@ -1,0 +1,366 @@
+.figure {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(
+      circle at 82% 10%,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      transparent 34%
+    ),
+    var(--surface);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+}
+
+.figure figcaption {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.eyebrow {
+  color: var(--accent-emphasis);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--text-primary);
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.description {
+  max-width: 48rem;
+  margin-top: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.canvas {
+  margin-top: 1.5rem;
+}
+
+.sharedCanvas,
+.gatesCanvas {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.group,
+.validationGate,
+.triageBranches section {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--background) 74%, transparent);
+  padding: 1rem;
+}
+
+.group h3,
+.validationGate h3,
+.triageBranches h3 {
+  color: var(--text-primary);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.group ul {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.group li,
+.pipelineStage,
+.triagePath li {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+  border: 1px solid color-mix(in srgb, var(--border) 74%, transparent);
+  border-radius: 0.75rem;
+  background: var(--surface-elevated);
+  padding: 0.75rem;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.group svg,
+.pipelineStage svg,
+.triagePath svg,
+.validationGate svg,
+.triageBranches svg,
+.feedbackLane svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex: 0 0 auto;
+  color: var(--accent-emphasis);
+}
+
+.emphasized {
+  border-color: color-mix(in srgb, var(--accent-emphasis) 48%, var(--border));
+  background: color-mix(in srgb, var(--accent-soft) 64%, var(--surface));
+}
+
+.compactList {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flowArrow {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  align-content: center;
+  color: var(--accent-emphasis);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.flowArrow svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  transform: rotate(90deg);
+}
+
+.pipeline {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pipelineStage {
+  position: relative;
+  min-height: 4.5rem;
+  padding-left: 3rem;
+}
+
+.pipelineStage:not(:last-child)::after {
+  content: "↓";
+  position: absolute;
+  right: 50%;
+  bottom: -1.05rem;
+  z-index: 2;
+  color: var(--accent-emphasis);
+  font-weight: 800;
+}
+
+.stageNumber {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--accent-emphasis);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+}
+
+.feedbackLane,
+.collaborationNote {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  border: 1px dashed
+    color-mix(in srgb, var(--accent-emphasis) 58%, var(--border));
+  border-radius: 0.875rem;
+  padding: 0.875rem 1rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.gateHeading {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.validationGate {
+  border-color: color-mix(in srgb, var(--accent-emphasis) 48%, var(--border));
+  background: color-mix(in srgb, var(--accent-soft) 64%, var(--surface));
+}
+
+.validationGate ul {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 0.875rem;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.validationGate li {
+  position: relative;
+  padding-left: 1.1rem;
+}
+
+.validationGate li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--accent-emphasis);
+  font-weight: 800;
+}
+
+.triagePath {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.triagePath li {
+  position: relative;
+  justify-content: center;
+  min-height: 4rem;
+  text-align: center;
+}
+
+.triagePath li:not(:last-child)::after {
+  content: "↓";
+  position: absolute;
+  bottom: -1.05rem;
+  z-index: 2;
+  color: var(--accent-emphasis);
+  font-weight: 800;
+}
+
+.decision {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  margin: 1rem auto;
+  color: var(--accent-emphasis);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.decision svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.triageBranches {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.triageBranches section {
+  position: relative;
+  padding-top: 2.75rem;
+}
+
+.triageBranches section > svg {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.branchLabel {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: var(--accent-emphasis);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.triageBranches p {
+  margin-top: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.collaborationNote {
+  justify-content: center;
+  text-align: center;
+}
+
+@media (min-width: 40rem) {
+  .pipeline {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .pipelineStage:not(:last-child)::after {
+    content: "→";
+    right: -0.62rem;
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+
+  .pipelineStage:nth-child(3)::after {
+    content: "↓";
+    right: 50%;
+    bottom: -1.05rem;
+    transform: none;
+  }
+
+  .triagePath {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .triagePath li:not(:last-child)::after {
+    content: "→";
+    right: -0.62rem;
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+
+  .triageBranches {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .sharedCanvas,
+  .gatesCanvas {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.25fr) auto minmax(
+        0,
+        1fr
+      );
+    align-items: stretch;
+  }
+
+  .flowArrow svg {
+    transform: none;
+  }
+
+  .pipeline {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .pipelineStage {
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.75rem 0.5rem 0.75rem;
+    text-align: center;
+  }
+
+  .pipelineStage:nth-child(3)::after {
+    content: "→";
+    right: -0.62rem;
+    bottom: 50%;
+    transform: translateY(50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .figure * {
+    transition: none !important;
+  }
+}

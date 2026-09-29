@@ -71,7 +71,7 @@ function ProfessionalCaseStudy({ item }: { item: (typeof workItems)[number] }) {
         <Badge>{item.statusLabel ?? workStatusLabels[item.status]}</Badge>
         <Badge>{workExecutionModelLabels[item.executionModel]}</Badge>
       </div>
-      <div className="mt-10 max-w-3xl space-y-12">
+      <div className="mt-10 max-w-5xl space-y-12 [&>div]:max-w-3xl [&>p]:max-w-3xl [&>section]:max-w-3xl">
         {sections.map((section) => (
           <section
             id={section.id}
