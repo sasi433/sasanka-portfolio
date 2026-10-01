@@ -33,6 +33,71 @@ test("homepage presents the primary story and approved profile image", async ({
   await expect(page.getByText(/One Planet Rating/).first()).toBeAttached();
 });
 
+test("homepage prioritizes identity, engineering evidence and approved calls to action", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+
+  const hero = page.locator("#home-intro");
+  const name = hero.getByText("Sasanka Maddala", { exact: true });
+  const role = hero.getByText("Senior Software Engineer", { exact: true });
+  const specialization = hero.getByText(
+    "Backend, Python, DevOps and Cloud-Native Systems",
+    { exact: true },
+  );
+  await expect(name).toBeInViewport();
+  await expect(role).toBeInViewport();
+  await expect(specialization).toBeInViewport();
+  await expect(
+    hero.getByRole("link", { name: "View My Work" }),
+  ).toHaveAttribute("href", "/work");
+  await expect(hero.getByRole("link", { name: "Contact Me" })).toHaveAttribute(
+    "href",
+    "/contact",
+  );
+  await expect(hero.getByRole("link", { name: /GitHub/ })).toBeVisible();
+  await expect(hero.getByRole("link", { name: /LinkedIn/ })).toBeVisible();
+  await expect(
+    hero.getByRole("link", { name: "Explore the portfolio" }),
+  ).toHaveAttribute("href", "#featured-work");
+
+  const sectionOrder = await page
+    .locator(
+      "#home-intro, #featured-work, #career-journey, #engineering-summary, #engineering-impact, #skills-summary, #beyond-code, #contact-destination",
+    )
+    .evaluateAll((sections) => sections.map((section) => section.id));
+  expect(sectionOrder).toEqual([
+    "home-intro",
+    "featured-work",
+    "career-journey",
+    "engineering-summary",
+    "engineering-impact",
+    "skills-summary",
+    "beyond-code",
+    "contact-destination",
+  ]);
+
+  const featuredSlugs = await page
+    .locator("#featured-work [data-work-slug]")
+    .evaluateAll((cards) =>
+      cards.map((card) => card.getAttribute("data-work-slug")),
+    );
+  expect(featuredSlugs).toEqual([
+    "document-support-rag-chatbot",
+    "production-incident-simulator",
+    "log-report-automation",
+    "shared-python-libraries",
+  ]);
+  await expect(page.getByText(/Security Master/i)).toHaveCount(0);
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.reload();
+  await expect(name).toBeInViewport();
+  await expect(role).toBeInViewport();
+  await expect(specialization).toBeInViewport();
+});
+
 test("hero motion and scroll stories remain controlled and move the portrait into the header", async ({
   page,
 }) => {

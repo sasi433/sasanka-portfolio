@@ -99,10 +99,16 @@ export function HeroStage() {
 
       <div className="hero-stage__content">
         <div className="hero-stage__copy">
-          <Badge>Senior Software Engineer</Badge>
+          <div className="hero-stage__identity">
+            <p className="hero-stage__name">Sasanka Maddala</p>
+            <div className="hero-stage__role">
+              <Badge>Senior Software Engineer</Badge>
+              <span>Backend, Python, DevOps and Cloud-Native Systems</span>
+            </div>
+          </div>
           <h1
             id="hero-heading"
-            className="mt-6 text-4xl leading-[1.03] font-semibold tracking-[-0.045em] sm:text-5xl lg:text-6xl xl:text-7xl"
+            className="mt-5 text-4xl leading-[1.03] font-semibold tracking-[-0.045em] sm:text-5xl lg:text-6xl xl:text-7xl"
           >
             Backend systems built for{" "}
             <span className="text-[var(--accent-emphasis)]">
@@ -135,7 +141,7 @@ export function HeroStage() {
             </ExternalLink>
           </div>
           <Link
-            href="#engineering-summary"
+            href="#featured-work"
             className="mt-9 inline-flex min-h-11 items-center gap-2 text-sm text-[var(--hero-text-secondary)]"
           >
             Explore the portfolio{" "}

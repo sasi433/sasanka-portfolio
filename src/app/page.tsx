@@ -1,9 +1,7 @@
-import Link from "next/link";
 import { careerStoryItems } from "@/components/home/career-journey";
 import { HeroStage } from "@/components/home/hero-stage";
 import { InterestGallery } from "@/components/content/interest-gallery";
 import { ScrollStory, type StoryItem } from "@/components/home/scroll-story";
-import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 import { SectionContainer } from "@/components/ui/section-container";
 import { WorkCard } from "@/components/work/work-card";
@@ -55,35 +53,29 @@ const impacts = [
   "More predictable container build, validation, scanning and delivery workflows",
   "Earlier build feedback through clearer module ownership and fail-fast validation",
   "Evidence-led production issue triage and cross-team escalation",
-  "Supported Secure Development Awareness as the Team's Security Master",
 ] as const;
 
-export default function Home() {
-  const featured = workItems.filter((item) => item.featured).slice(0, 4);
-  const building = workItems.find(
-    (item) => item.status === "currently-building",
-  );
+const featuredWorkSlugs = [
+  "document-support-rag-chatbot",
+  "production-incident-simulator",
+  "log-report-automation",
+  "shared-python-libraries",
+] as const;
 
+const featuredWork = featuredWorkSlugs.map((slug) => {
+  const item = workItems.find((candidate) => candidate.slug === slug);
+
+  if (!item) {
+    throw new Error(`Missing featured work item: ${slug}`);
+  }
+
+  return item;
+});
+
+export default function Home() {
   return (
     <div className="page-shell">
       <HeroStage />
-
-      <ScrollStory
-        id="engineering-summary"
-        eyebrow="Engineering focus"
-        title="Broad systems experience, connected by reliability."
-        description="Each change in focus is a different part of the same delivery system—from maintainable services to dependable operations."
-        items={pillars}
-      />
-
-      <ScrollStory
-        id="career-journey"
-        eyebrow="Career journey"
-        title="An expanding engineering scope."
-        description="Systems fundamentals remain the foundation as the work grows across backend engineering, automation and cloud-native delivery."
-        items={careerStoryItems}
-        cta={{ href: "/experience", label: "Explore experience" }}
-      />
 
       <SectionContainer
         id="featured-work"
@@ -96,31 +88,33 @@ export default function Home() {
           id="featured-heading"
         />
         <div className="mt-8 grid gap-5 md:grid-cols-2">
-          {featured.map((item) => (
+          {featuredWork.map((item) => (
             <WorkCard key={item.slug} item={item} />
           ))}
         </div>
-        {building ? (
-          <div className="mt-6 rounded-2xl border border-dashed border-[var(--border)] p-6">
-            <Badge>Currently building</Badge>
-            <h3 className="mt-4 text-lg font-semibold">{building.title}</h3>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--text-secondary)]">
-              {building.summary}
-            </p>
-            <Link
-              className="mt-4 inline-block font-semibold text-[var(--accent-emphasis)]"
-              href={`/work/${building.slug}`}
-            >
-              Follow the project →
-            </Link>
-          </div>
-        ) : null}
         <div className="section-cta">
           <ButtonLink href="/work" variant="secondary">
             View all work
           </ButtonLink>
         </div>
       </SectionContainer>
+
+      <ScrollStory
+        id="career-journey"
+        eyebrow="Career journey"
+        title="An expanding engineering scope."
+        description="Systems fundamentals remain the foundation as the work grows across backend engineering, automation and cloud-native delivery."
+        items={careerStoryItems}
+        cta={{ href: "/experience", label: "Explore experience" }}
+      />
+
+      <ScrollStory
+        id="engineering-summary"
+        eyebrow="Engineering focus"
+        title="Broad systems experience, connected by reliability."
+        description="Each change in focus is a different part of the same delivery system—from maintainable services to dependable operations."
+        items={pillars}
+      />
 
       <SectionContainer
         id="engineering-impact"
