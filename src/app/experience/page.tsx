@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Building2, MapPin, ShieldCheck } from "lucide-react";
+import { Building2, MapPin } from "lucide-react";
 import { PageIntro } from "@/components/content/page-intro";
 import { Badge } from "@/components/ui/badge";
 import { SectionContainer } from "@/components/ui/section-container";
@@ -116,24 +116,6 @@ export default function ExperiencePage() {
           </SectionContainer>
         );
       })}
-
-      <SectionContainer id="secure-development" className="pb-20 sm:pb-24">
-        <aside className="rounded-2xl border border-[var(--border)] bg-[var(--accent-soft)] p-6 sm:p-8">
-          <ShieldCheck
-            aria-hidden="true"
-            className="size-6 text-[var(--accent-emphasis)]"
-          />
-          <Badge className="mt-5">Secure engineering highlight</Badge>
-          <h2 className="mt-4 text-xl font-semibold">
-            Supported Secure Development Awareness as the Team&apos;s Security
-            Master
-          </h2>
-          <p className="mt-3 max-w-3xl text-sm leading-6 text-[var(--text-secondary)]">
-            A supporting team responsibility focused on secure-development
-            awareness—not a dedicated security engineering or leadership role.
-          </p>
-        </aside>
-      </SectionContainer>
     </div>
   );
 }

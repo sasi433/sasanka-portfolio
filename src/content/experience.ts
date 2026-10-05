@@ -3,10 +3,10 @@ import type { ExperienceItem } from "@/content/types";
 export const experienceItems = [
   {
     organisation: "Volvo Group",
-    role: "Software Consultant — Client Engineering Assignment",
+    role: "Software Consultant - Client Engineering Assignment",
     dates: "April 2025 – June 2026",
     context:
-      "Worked on Python services, shared Python libraries, internal engineering tooling, CI/CD workflows, build systems, container delivery and cloud-native deployment in a Volvo Group engineering environment.",
+      "Worked as a software consultant on a client engineering assignment at Volvo Group, contributing to Python services, shared Python libraries, internal engineering tooling, CI/CD workflows, build systems, container delivery and cloud-native deployment.",
     contributions: [
       "Developed reusable shared Python libraries for common functionality used across multiple applications.",
       "Improved CI/CD workflows for building, tagging, validating, scanning, pushing and cleaning up container images.",
@@ -41,7 +41,7 @@ export const experienceItems = [
     role: "Software Developer",
     dates: "March 2019 – March 2025",
     context:
-      "Worked in Linux-based telecom and 5G RAN/baseband engineering environments, primarily using C and C++, with later Python and Bash automation and CI/CD responsibilities.",
+      "Directly employed by Ericsson from March 2019 through March 2025, working in Linux-based telecom and 5G RAN/baseband engineering environments, primarily using C and C++, with later Python and Bash automation and CI/CD responsibilities.",
     contributions: [
       "Developed and maintained C/C++ software in Linux-based telecom systems.",
       "Worked with real-time, multithreaded, distributed and performance-sensitive software components.",

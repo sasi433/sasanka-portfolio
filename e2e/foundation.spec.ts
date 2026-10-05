@@ -155,6 +155,42 @@ test("verified experience, education, thesis and languages are published", async
   await expect(
     page.getByText("Backend Developer", { exact: true }),
   ).toBeVisible();
+  await expect(
+    page.getByText("Software Consultant - Client Engineering Assignment", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(page.getByText("April 2025 – June 2026")).toBeVisible();
+  await expect(
+    page.getByText("Software Developer", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("March 2019 – March 2025")).toBeVisible();
+  await expect(page.getByText(/Directly employed by Ericsson/)).toBeVisible();
+  await expect(page.getByText(/Security Master/i)).toHaveCount(1);
+
+  await page.goto("/skills");
+  await expect(
+    page.getByText(
+      "Portfolio-demonstrated technologies used to design, build, test and deploy this website.",
+    ),
+  ).toBeAttached();
+  const aiScene = page
+    .locator("#skills-story .media-scroll-story__scene")
+    .filter({ hasText: "AI-Assisted Engineering" });
+  await expect(aiScene).toBeAttached();
+  const aiBadges = await aiScene
+    .locator(".media-scroll-story__badges > *")
+    .allTextContents();
+  expect(aiBadges).toEqual([
+    "AI-assisted implementation",
+    "AI-assisted testing",
+    "AI-assisted review",
+    "Prompt engineering",
+    "OpenAI Codex",
+    "GitHub Copilot",
+    "ChatGPT",
+    "Claude",
+  ]);
 
   await page.goto("/about");
   await expect(

@@ -98,7 +98,7 @@ export const skillGroups = [
   {
     title: "Modern Web Portfolio Stack",
     description:
-      "Technologies demonstrated through the design and implementation of this portfolio.",
+      "Portfolio-demonstrated technologies used to design, build, test and deploy this website.",
     skills: [
       "React",
       "Next.js",
@@ -116,16 +116,16 @@ export const skillGroups = [
   {
     title: "AI-Assisted Engineering",
     description:
-      "Tools used thoughtfully for implementation, testing and review.",
+      "Implementation, testing, review and prompt-design capabilities supported by thoughtfully selected AI tools.",
     skills: [
+      "AI-assisted implementation",
+      "AI-assisted testing",
+      "AI-assisted review",
+      "Prompt engineering",
       "OpenAI Codex",
       "GitHub Copilot",
       "ChatGPT",
       "Claude",
-      "Prompt engineering",
-      "AI-assisted implementation",
-      "AI-assisted testing",
-      "AI-assisted review",
     ],
     image: {
       src: "/images/skills/ai-assisted-engineering-v2.webp",

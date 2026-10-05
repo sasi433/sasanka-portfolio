@@ -23,7 +23,7 @@ This file tracks source material that must be verified before it is published. P
 - Public name, professional headline, biography and professional email address.
 - Public GitHub and LinkedIn profile URLs.
 - Approved professional headshot and repository-relative public path.
-- One Planet Rating, Ericsson and Volvo Group role wording, date ranges, responsibilities and technologies.
+- One Planet Rating, Ericsson and Volvo Group role wording, date ranges, responsibilities and technologies. On 2026-10-05, the owner explicitly confirmed direct Ericsson employment from March 2019 through March 2025.
 - Three curated public project repositories, descriptions and current status labels.
 - Four sanitised professional case-study subjects and the Secure Development Awareness highlight.
 - Grouped skills and selected Beyond Code interests.
