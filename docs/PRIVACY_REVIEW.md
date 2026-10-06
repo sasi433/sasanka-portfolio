@@ -45,6 +45,7 @@ This document records the local Phase 9 audit. A checked item means the reposito
 ## Owner and production checks still required
 
 - [x] Review the One Planet Rating, education, thesis and language content added after the earlier owner review.
+- [ ] Confirm whether the public Hindi proficiency wording `Professional working proficiency` is accurate; do not change it without explicit owner approval.
 - [x] Read every public page and approve the professional wording, project statuses, interests, photograph, and professional email for publication.
 - [x] Review the linked GitHub and LinkedIn profiles themselves. They may expose location or employment details that the portfolio intentionally omits.
 - [x] Authenticate GitHub tooling and confirm the hosted `main` CI workflow passes.

@@ -144,6 +144,7 @@ export default function AboutPage() {
         id="beyond-code"
         label="Interests beyond code"
         items={interestScenes}
+        className="media-scroll-story--condensed"
       />
 
       <SectionContainer id="languages" className="py-20 sm:py-24">

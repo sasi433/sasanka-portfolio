@@ -587,6 +587,7 @@ test("visual storytelling uses distinct scene tones and image-led skill and inte
 
   await page.goto("/skills");
   const skillsStory = page.locator("#skills-story");
+  await expect(skillsStory).not.toHaveClass(/media-scroll-story--condensed/);
   await expect(skillsStory.locator(".media-scroll-story__scene")).toHaveCount(
     7,
   );
@@ -636,6 +637,7 @@ test("visual storytelling uses distinct scene tones and image-led skill and inte
 
   await page.goto("/about");
   const beyondCode = page.locator("#beyond-code");
+  await expect(beyondCode).toHaveClass(/media-scroll-story--condensed/);
   await expect(beyondCode.locator(".media-scroll-story__scene")).toHaveCount(8);
   await beyondCode
     .locator(".media-scroll-story__trigger")
@@ -660,7 +662,9 @@ test("visual storytelling uses distinct scene tones and image-led skill and inte
 
   const beyondBox = await page.locator("#beyond-code-heading").boundingBox();
   const languagesBox = await page.locator("#languages").boundingBox();
+  const beyondStoryBox = await beyondCode.boundingBox();
   expect(beyondBox?.y).toBeLessThan(languagesBox?.y ?? 0);
+  expect((beyondStoryBox?.height ?? Infinity) / 900).toBeLessThan(4);
 });
 
 test("mobile navigation manages focus and closes with Escape", async ({
@@ -725,6 +729,21 @@ test("mobile view retains safe hero motion and scroll-driven stories", async ({
   await expect(
     skillsStory.locator(".media-scroll-story__scene").nth(1),
   ).toHaveClass(/is-active/);
+
+  await page.goto("/about");
+  const beyondCode = page.locator("#beyond-code");
+  await expect(beyondCode).toHaveClass(/media-scroll-story--condensed/);
+  await expect(beyondCode).toHaveClass(/is-enhanced/);
+  await beyondCode
+    .locator(".media-scroll-story__trigger")
+    .nth(6)
+    .evaluate((element) => element.scrollIntoView({ block: "center" }));
+  await expect(beyondCode).toHaveAttribute("data-active-index", "6");
+  await expect(
+    beyondCode.locator(".media-scroll-story__scene").nth(6),
+  ).toContainText("Travel");
+  const condensedBox = await beyondCode.boundingBox();
+  expect((condensedBox?.height ?? Infinity) / 844).toBeLessThan(4.1);
 });
 
 test("skip link reaches the main content", async ({ page }) => {
