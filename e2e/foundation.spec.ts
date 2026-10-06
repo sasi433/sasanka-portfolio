@@ -792,7 +792,7 @@ test("essential portfolio content remains readable without JavaScript", async ({
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
 
-  await page.goto("/");
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(
     page.getByRole("heading", {
       level: 1,
@@ -801,14 +801,14 @@ test("essential portfolio content remains readable without JavaScript", async ({
   ).toBeVisible();
   await expect(page.getByText(/One Planet Rating/).first()).toBeVisible();
 
-  await page.goto("/about");
+  await page.goto("/about", { waitUntil: "domcontentloaded" });
   await expect(
     page.getByRole("heading", {
       name: "Channel Estimation of OFDM by LS and MMSE Methods",
     }),
   ).toBeVisible();
 
-  await page.goto("/skills");
+  await page.goto("/skills", { waitUntil: "domcontentloaded" });
   await expect(
     page.getByRole("heading", { name: "AI-Assisted Engineering" }),
   ).toBeVisible();
